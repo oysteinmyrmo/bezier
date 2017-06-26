@@ -64,6 +64,40 @@ namespace Bezier
     };
 
     class ControlPoint
+    struct PolynomialPair
+    {
+        size_t t = 0;
+        size_t one_minus_t = 0;
+    };
+
+    template<size_t N>
+    class PolynomialCoefficients
+    {
+    public:
+        PolynomialCoefficients()
+        {
+            for (size_t i = 0; i <= N; i++)
+            {
+                mPolynomialPairs[i].t = i;
+                mPolynomialPairs[i].one_minus_t = N - i;
+                assert(mPolynomialPairs[i].t + mPolynomialPairs[i].one_minus_t == N);
+            }
+        }
+
+        const size_t size() const
+        {
+            return N + 1;
+        }
+
+        const PolynomialPair& operator [](size_t pos) const
+        {
+            return mPolynomialPairs[pos];
+        }
+
+    private:
+        PolynomialPair mPolynomialPairs[N+1];
+    };
+
     {
     public:
         ControlPoint()
@@ -143,6 +177,7 @@ namespace Bezier
 
     public:
         static const BinomialCoefficients<N> binomialCoefficients;
+        static const PolynomialCoefficients<N> polynomialCoefficients;
 
     private:
         ControlPoint mControlPoints[N+1];
@@ -150,5 +185,8 @@ namespace Bezier
 
     template<size_t N>
     const BinomialCoefficients<N> Bezier<N>::binomialCoefficients = BinomialCoefficients<N>();
+
+    template<size_t N>
+    const PolynomialCoefficients<N> Bezier<N>::polynomialCoefficients = PolynomialCoefficients<N>();
 
 } // namespace Bezier
