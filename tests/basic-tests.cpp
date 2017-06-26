@@ -195,17 +195,17 @@ void control_points()
     Bezier::Bezier<2> bezier2;
     assert(bezier2.size() == 3);
 
-    Bezier::ControlPoint &cp = bezier2[0];
-    assert(cp.x == 0.0f);
-    assert(cp.y == 0.0f);
-    assert(cp.z == 0.0f);
+    Bezier::Point &p = bezier2[0];
+    assert(p.x == 0.0f);
+    assert(p.y == 0.0f);
+    assert(p.z == 0.0f);
 
-    cp.set(1.0f, 2.0f, 3.0f);
+    p.set(1.0f, 2.0f, 3.0f);
     assert(bezier2[0].x == 1.0f);
     assert(bezier2[0].y == 2.0f);
     assert(bezier2[0].z == 3.0f);
 
-    cp.move(1, -1, 0);
+    p.move(1, -1, 0);
     assert(bezier2[0].x == 2.0f);
     assert(bezier2[0].y == 1.0f);
     assert(bezier2[0].z == 3.0f);
