@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <math.h>
 
-namespace SB
+namespace Bezier
 {
     namespace Math
     {
