@@ -1,6 +1,7 @@
 #pragma once
 #include <assert.h>
 #include <math.h>
+#include <vector>
 
 namespace Bezier
 {
@@ -62,6 +63,46 @@ namespace Bezier
         float mCoefficients[N+1];
     };
 
+    class ControlPoint
+    {
+    public:
+        ControlPoint()
+            : x(0)
+            , y(0)
+            , z(0)
+        {}
+
+        ControlPoint(float x, float y, float z)
+            : x(x)
+            , y(y)
+            , z(z)
+        {}
+
+        ControlPoint(const ControlPoint& other)
+            : x(other.x)
+            , y(other.y)
+            , z(other.z)
+        {}
+
+        void set(float x, float y, float z)
+        {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
+
+        void move(float dx, float dy, float dz)
+        {
+            x += dx;
+            y += dy;
+            z += dz;
+        }
+
+        float x;
+        float y;
+        float z;
+    };
+
     template <size_t N>
     class Bezier
     {
@@ -69,7 +110,42 @@ namespace Bezier
         Bezier()
         {}
 
+        Bezier(const std::vector<ControlPoint> controlPoints)
+        {
+            for (size_t i = 0; i < controlPoints.size(); i++)
+                mControlPoints[i] = ControlPoint(controlPoints[i]);
+        }
+
+        Bezier(const Bezier<N>& other)
+        {
+            for (size_t i = 0; i < other.size(); i++)
+                mControlPoints[i] = ControlPoint(other[i]);
+        }
+
+        // The order of the bezier curve.
+        size_t order() const
+        {
+            return N;
+        }
+
+        // Number of control points.
+        size_t size() const
+        {
+            return N + 1;
+        }
+
+    public:
+        ControlPoint& operator [](size_t pos)
+        {
+            assert(pos < size());
+            return mControlPoints[pos];
+        }
+
+    public:
         static const BinomialCoefficients<N> binomialCoefficients;
+
+    private:
+        ControlPoint mControlPoints[N+1];
     };
 
     template<size_t N>
