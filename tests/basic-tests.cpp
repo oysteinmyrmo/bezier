@@ -19,24 +19,24 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
-#include "simple_bezier.h"
+#include "bezier.h"
 #include "assert.h"
 
 #define ASSERT_BINOMIAL_COEFFICIENT(N, pos, val) \
-    SB_ASSERT(Bezier::Bezier<N>::binomialCoefficients[pos] == val);
+    BEZIER_ASSERT(Bezier::Bezier<N>::binomialCoefficients[pos] == val);
 
 void binomial_tests()
 {
-    SB_ASSERT(Bezier::Bezier<0>::binomialCoefficients.size() == 1);
-    SB_ASSERT(Bezier::Bezier<1>::binomialCoefficients.size() == 2);
-    SB_ASSERT(Bezier::Bezier<2>::binomialCoefficients.size() == 3);
-    SB_ASSERT(Bezier::Bezier<3>::binomialCoefficients.size() == 4);
-    SB_ASSERT(Bezier::Bezier<4>::binomialCoefficients.size() == 5);
-    SB_ASSERT(Bezier::Bezier<5>::binomialCoefficients.size() == 6);
-    SB_ASSERT(Bezier::Bezier<10>::binomialCoefficients.size() == 11);
-    SB_ASSERT(Bezier::Bezier<15>::binomialCoefficients.size() == 16);
-    SB_ASSERT(Bezier::Bezier<20>::binomialCoefficients.size() == 21);
-    SB_ASSERT(Bezier::Bezier<50>::binomialCoefficients.size() == 51);
+    BEZIER_ASSERT(Bezier::Bezier<0>::binomialCoefficients.size() == 1);
+    BEZIER_ASSERT(Bezier::Bezier<1>::binomialCoefficients.size() == 2);
+    BEZIER_ASSERT(Bezier::Bezier<2>::binomialCoefficients.size() == 3);
+    BEZIER_ASSERT(Bezier::Bezier<3>::binomialCoefficients.size() == 4);
+    BEZIER_ASSERT(Bezier::Bezier<4>::binomialCoefficients.size() == 5);
+    BEZIER_ASSERT(Bezier::Bezier<5>::binomialCoefficients.size() == 6);
+    BEZIER_ASSERT(Bezier::Bezier<10>::binomialCoefficients.size() == 11);
+    BEZIER_ASSERT(Bezier::Bezier<15>::binomialCoefficients.size() == 16);
+    BEZIER_ASSERT(Bezier::Bezier<20>::binomialCoefficients.size() == 21);
+    BEZIER_ASSERT(Bezier::Bezier<50>::binomialCoefficients.size() == 51);
 
     // N = 0 --> [1]
     ASSERT_BINOMIAL_COEFFICIENT(0, 0, 1);
