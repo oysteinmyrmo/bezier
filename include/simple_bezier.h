@@ -151,4 +151,4 @@ namespace Bezier
     template<size_t N>
     const BinomialCoefficients<N> Bezier<N>::binomialCoefficients = BinomialCoefficients<N>();
 
-} // namespace SB
+} // namespace Bezier
