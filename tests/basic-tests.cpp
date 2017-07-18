@@ -204,7 +204,7 @@ void polynomial_tests()
     ASSERT_POLYNOMIAL_COEFFICIENTS(10, 10, 0, 10);
 }
 
-void control_points()
+void control_points_tests()
 {
     Bezier::Bezier<2> bezier2;
     assert(bezier2.size() == 3);
@@ -281,7 +281,7 @@ int main()
 {
     binomial_tests();
     polynomial_tests();
-    control_points();
+    control_points_tests();
     values_tests();
 
     return 0;
