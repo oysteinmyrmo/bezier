@@ -25,6 +25,20 @@
 #define ASSERT_BINOMIAL_COEFFICIENT(N, pos, val) \
     BEZIER_ASSERT(Bezier::Bezier<N>::binomialCoefficients[pos] == val);
 
+#define ASSERT_WITHIN_EPSILON(val, correctVal) \
+{ \
+    static const double epsilon = 0.00001; \
+    BEZIER_ASSERT(val <= correctVal + epsilon); \
+    BEZIER_ASSERT(val >= correctVal - epsilon); \
+}
+
+#define ASSERT_POINT_WITHIN_EPSILON(point, x2, y2, z2) \
+{ \
+    ASSERT_WITHIN_EPSILON(point.x, x2); \
+    ASSERT_WITHIN_EPSILON(point.y, y2); \
+    ASSERT_WITHIN_EPSILON(point.z, z2); \
+}
+
 void binomial_tests()
 {
     BEZIER_ASSERT(Bezier::Bezier<0>::binomialCoefficients.size() == 1);
@@ -211,11 +225,64 @@ void control_points()
     assert(bezier2[0].z == 3.0f);
 }
 
+void values_tests()
+{
+    std::vector<Bezier::Point> cp(4);
+    cp[0].set(120, 160, 0);
+    cp[1].set(35, 200, 0);
+    cp[2].set(220, 260, 0);
+    cp[3].set(220, 40, 0);
+    Bezier::Bezier<3> bz(cp);
+
+    Bezier::Point val = bz.valueAt(0);
+    ASSERT_POINT_WITHIN_EPSILON(val, 120, 160, 0);
+
+    val = bz.valueAt(1);
+    ASSERT_POINT_WITHIN_EPSILON(val, 220, 40, 0);
+
+    val = bz.valueAt(0.25);
+    ASSERT_POINT_WITHIN_EPSILON(val, 99.765625, 189.0625, 0);
+
+    val = bz.valueAt(0.50);
+    ASSERT_POINT_WITHIN_EPSILON(val, 138.125, 197.5, 0);
+
+    val = bz.valueAt(0.75);
+    ASSERT_POINT_WITHIN_EPSILON(val, 192.421875, 157.1875, 0);
+
+    val = bz.valueAt(-0.35);
+    ASSERT_POINT_WITHIN_EPSILON(val, 327.983124, 138.212509, 0);
+
+    val = bz.valueAt(1.5);
+    ASSERT_POINT_WITHIN_EPSILON(val, 24.375, -537.5, 0);
+
+    std::vector<Bezier::Point> cp2(3);
+    cp2[0].set(70, 155, 0);
+    cp2[1].set(20, 110, 0);
+    cp2[2].set(100, 75, 0);
+    Bezier::Bezier<2> bz2(cp2);
+
+    val = bz2.valueAt(0);
+    ASSERT_POINT_WITHIN_EPSILON(val, 70, 155, 0);
+
+    val = bz2.valueAt(1);
+    ASSERT_POINT_WITHIN_EPSILON(val, 100, 75, 0);
+
+    val = bz2.valueAt(0.5);
+    ASSERT_POINT_WITHIN_EPSILON(val, 52.5, 112.5, 0);
+
+    val = bz2.valueAt(-1.0);
+    ASSERT_POINT_WITHIN_EPSILON(val, 300, 255, 0);
+
+    val = bz2.valueAt(2.0);
+    ASSERT_POINT_WITHIN_EPSILON(val, 390, 15, 0);
+}
+
 int main()
 {
     binomial_tests();
     polynomial_tests();
     control_points();
+    values_tests();
 
     return 0;
 }

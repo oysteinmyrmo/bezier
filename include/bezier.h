@@ -67,6 +67,11 @@ namespace Bezier
     {
         size_t t = 0;
         size_t one_minus_t = 0;
+
+        double valueAt(float t) const
+        {
+            return pow(1 - t, one_minus_t) * pow(t, this->t);
+        }
     };
 
     template<size_t N>
@@ -81,6 +86,12 @@ namespace Bezier
                 mPolynomialPairs[i].one_minus_t = N - i;
                 assert(mPolynomialPairs[i].t + mPolynomialPairs[i].one_minus_t == N);
             }
+        }
+
+        double valueAt(size_t pos, float t) const
+        {
+            assert(pos < size());
+            return mPolynomialPairs[pos].valueAt(t);
         }
 
         const size_t size() const
@@ -132,6 +143,58 @@ namespace Bezier
             z += dz;
         }
 
+        float operator[](size_t pos) const
+        {
+            assert(pos <= 2);
+            switch (pos)
+            {
+                case 0:
+                    return x;
+                case 1:
+                    return y;
+                case 2:
+                    return z;
+                default:
+                    return 0;
+            }
+        }
+
+        float& operator[](size_t pos)
+        {
+            assert(pos <= 2);
+            switch (pos)
+            {
+                case 0:
+                    return x;
+                case 1:
+                    return y;
+                case 2:
+                    return z;
+                default:
+                    return x; // TODO: Better handling/printing
+            }
+        }
+
+        Point operator+(const Point& other) const
+        {
+            return Point(x + other.x, y + other.y, z + other.z);
+        }
+
+        Point operator-(const Point& other) const
+        {
+            return Point(x - other.x, y - other.y, z - other.z);
+        }
+
+        Point operator*(double scale) const
+        {
+            return Point(x * scale, y * scale, z * scale);
+        }
+
+        Point operator/(double scale) const
+        {
+            return Point(x / scale, y / scale, z / scale);
+        }
+
         float x;
         float y;
         float z;
@@ -142,7 +205,10 @@ namespace Bezier
     {
     public:
         Bezier()
-        {}
+        {
+            for (size_t i = 0; i < N+1; i++)
+                mControlPoints[i].set(0, 0, 0);
+        }
 
         Bezier(const std::vector<Point> controlPoints)
         {
@@ -166,6 +232,22 @@ namespace Bezier
         size_t size() const
         {
             return N + 1;
+        }
+
+    public:
+        Point valueAt(float t) const
+        {
+            Point p;
+            for (size_t i = 0; i < 3; i++)
+            {
+                double sum = 0;
+                for (size_t n = 0; n < N+1; n++)
+                {
+                    sum += binomialCoefficients[n] * polynomialCoefficients[n].valueAt(t) * mControlPoints[n][i];
+                }
+                p[i] = sum;
+            }
+            return p;
         }
 
     public:
