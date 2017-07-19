@@ -136,11 +136,31 @@ namespace Bezier
             this->z = z;
         }
 
+        void set(const Point& other)
+        {
+            this->x = other.x;
+            this->y = other.y;
+            this->z = other.z;
+        }
+
         void move(float dx, float dy, float dz)
         {
             x += dx;
             y += dy;
             z += dz;
+        }
+
+        double length() const
+        {
+            return sqrt(x*x + y*y + z*z);
+        }
+
+        void normalize()
+        {
+            double len = length();
+            x /= len;
+            y /= len;
+            z /= len;
         }
 
         float operator[](size_t pos) const
@@ -234,6 +254,19 @@ namespace Bezier
             return N + 1;
         }
 
+        Bezier<N-1> derivative() const
+        {
+            assert(N > 0);
+
+            // Note: derivative weights/control points are not actual control points.
+            std::vector<Point> derivativeWeights(N);
+            for (size_t i = 0; i < N; i++)
+                derivativeWeights[i] = Point((mControlPoints[i+1] - mControlPoints[i]) * N);
+
+            Bezier<N-1> bezier(derivativeWeights);
+            return bezier;
+        }
+
     public:
         Point valueAt(float t) const
         {
@@ -247,6 +280,24 @@ namespace Bezier
                 }
                 p[i] = sum;
             }
+            return p;
+        }
+
+        Point tangentAt(float t, bool normalize = true) const
+        {
+            Point p;
+            Bezier<N-1> derivative = this->derivative();
+            p.set(derivative.valueAt(t));
+            if (normalize)
+                p.normalize();
+            return p;
+        }
+
+        Point normalAt(float t, bool normalize = true) const
+        {
+            Point p;
+            Point tangent = tangentAt(t, normalize);
+            p.set(-tangent.y, tangent.x, tangent.z);
             return p;
         }
 

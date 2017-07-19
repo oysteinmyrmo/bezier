@@ -277,13 +277,32 @@ void values_tests()
     ASSERT_POINT_WITHIN_EPSILON(val, 390, 15, 0);
 }
 
+void derivatives_tests()
+{
+    std::vector<Bezier::Point> controlPoints3(4);
+    controlPoints3[0] = Bezier::Point(120, 160, 0);
+    controlPoints3[1] = Bezier::Point(35, 200, 0);
+    controlPoints3[2] = Bezier::Point(220, 260, 0);
+    controlPoints3[3] = Bezier::Point(220, 40, 0);
+
+    Bezier::Bezier<3> bezier3(controlPoints3);
+    Bezier::Bezier<2> bezier2 = bezier3.derivative();
+    Bezier::Bezier<1> bezier1 = bezier2.derivative();
+    Bezier::Bezier<0> bezier0 = bezier1.derivative();
+
+    assert(bezier3.size() == 4);
+    assert(bezier2.size() == 3);
+    assert(bezier1.size() == 2);
+    assert(bezier0.size() == 1);
+}
+
 int main()
 {
     binomial_tests();
     polynomial_tests();
     control_points_tests();
     values_tests();
-
+    derivatives_tests();
     return 0;
 }
 
