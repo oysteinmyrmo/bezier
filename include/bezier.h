@@ -228,7 +228,7 @@ namespace Bezier
                 mControlPoints[i].set(0, 0);
         }
 
-        Bezier(const std::vector<Point> controlPoints)
+        Bezier(const std::vector<Point>& controlPoints)
         {
             for (size_t i = 0; i < controlPoints.size(); i++)
                 mControlPoints[i] = Point(controlPoints[i]);
