@@ -266,17 +266,22 @@ namespace Bezier
         }
 
     public:
+        double valueAt(float t, size_t axis) const
+        {
+            double sum = 0;
+            for (size_t n = 0; n < N+1; n++)
+            {
+                sum += binomialCoefficients[n] * polynomialCoefficients[n].valueAt(t) * mControlPoints[n][axis];
+            }
+            return sum;
+        }
+
         Point valueAt(float t) const
         {
             Point p;
             for (size_t i = 0; i < Point::size; i++)
             {
-                double sum = 0;
-                for (size_t n = 0; n < N+1; n++)
-                {
-                    sum += binomialCoefficients[n] * polynomialCoefficients[n].valueAt(t) * mControlPoints[n][i];
-                }
-                p[i] = sum;
+                p[i] = (float) valueAt(t, i);
             }
             return p;
         }
