@@ -3,6 +3,13 @@
 #include <math.h>
 #include <vector>
 
+// Cross platform define for printing size_t variables
+#ifdef __WIN32__
+#define BEZIER_SIZE_T_FORMAT "%ld"
+#else
+#define BEZIER_SIZE_T_FORMAT "%zd"
+#endif
+
 namespace Bezier
 {
     namespace Math
@@ -114,45 +121,39 @@ namespace Bezier
         Point()
             : x(0)
             , y(0)
-            , z(0)
         {}
 
-        Point(float x, float y, float z)
+        Point(float x, float y)
             : x(x)
             , y(y)
-            , z(z)
         {}
 
         Point(const Point& other)
             : x(other.x)
             , y(other.y)
-            , z(other.z)
         {}
 
-        void set(float x, float y, float z)
+        void set(float x, float y)
         {
             this->x = x;
             this->y = y;
-            this->z = z;
         }
 
         void set(const Point& other)
         {
             this->x = other.x;
             this->y = other.y;
-            this->z = other.z;
         }
 
-        void move(float dx, float dy, float dz)
+        void move(float dx, float dy)
         {
             x += dx;
             y += dy;
-            z += dz;
         }
 
         double length() const
         {
-            return sqrt(x*x + y*y + z*z);
+            return sqrt(x*x + y*y);
         }
 
         void normalize()
@@ -160,64 +161,61 @@ namespace Bezier
             double len = length();
             x /= len;
             y /= len;
-            z /= len;
         }
 
-        float operator[](size_t pos) const
+        float operator[](size_t axis) const
         {
-            assert(pos <= 2);
-            switch (pos)
+            assert(axis < Point::size);
+            switch (axis)
             {
                 case 0:
                     return x;
                 case 1:
                     return y;
-                case 2:
-                    return z;
                 default:
+                    fprintf(stderr, "Erroneous axis: " BEZIER_SIZE_T_FORMAT ". Returning 0.\n", axis);
                     return 0;
             }
         }
 
-        float& operator[](size_t pos)
+        float& operator[](size_t axis)
         {
-            assert(pos <= 2);
-            switch (pos)
+            assert(axis < Point::size);
+            switch (axis)
             {
                 case 0:
                     return x;
                 case 1:
                     return y;
-                case 2:
-                    return z;
                 default:
-                    return x; // TODO: Better handling/printing
+                    fprintf(stderr, "Erroneous axis: " BEZIER_SIZE_T_FORMAT ". Returning x.\n", axis);
+                    return x;
             }
         }
 
         Point operator+(const Point& other) const
         {
-            return Point(x + other.x, y + other.y, z + other.z);
+            return Point(x + other.x, y + other.y);
         }
 
         Point operator-(const Point& other) const
         {
-            return Point(x - other.x, y - other.y, z - other.z);
+            return Point(x - other.x, y - other.y);
         }
 
         Point operator*(double scale) const
         {
-            return Point(x * scale, y * scale, z * scale);
+            return Point(x * scale, y * scale);
         }
 
         Point operator/(double scale) const
         {
-            return Point(x / scale, y / scale, z / scale);
+            return Point(x / scale, y / scale);
         }
 
         float x;
         float y;
-        float z;
+        static constexpr size_t size = 2;
     };
 
     template <size_t N>
@@ -227,7 +225,7 @@ namespace Bezier
         Bezier()
         {
             for (size_t i = 0; i < N+1; i++)
-                mControlPoints[i].set(0, 0, 0);
+                mControlPoints[i].set(0, 0);
         }
 
         Bezier(const std::vector<Point> controlPoints)
@@ -271,7 +269,7 @@ namespace Bezier
         Point valueAt(float t) const
         {
             Point p;
-            for (size_t i = 0; i < 3; i++)
+            for (size_t i = 0; i < Point::size; i++)
             {
                 double sum = 0;
                 for (size_t n = 0; n < N+1; n++)
@@ -297,7 +295,7 @@ namespace Bezier
         {
             Point p;
             Point tangent = tangentAt(t, normalize);
-            p.set(-tangent.y, tangent.x, tangent.z);
+            p.set(-tangent.y, tangent.x);
             return p;
         }
 

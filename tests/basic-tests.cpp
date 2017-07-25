@@ -195,26 +195,23 @@ void control_points_tests()
     Bezier::Point &p = bezier2[0];
     assert(p.x == 0.0f);
     assert(p.y == 0.0f);
-    assert(p.z == 0.0f);
 
-    p.set(1.0f, 2.0f, 3.0f);
+    p.set(1.0f, 2.0f);
     assert(bezier2[0].x == 1.0f);
     assert(bezier2[0].y == 2.0f);
-    assert(bezier2[0].z == 3.0f);
 
-    p.move(1, -1, 0);
+    p.move(1, -1);
     assert(bezier2[0].x == 2.0f);
     assert(bezier2[0].y == 1.0f);
-    assert(bezier2[0].z == 3.0f);
 }
 
 void values_tests()
 {
     std::vector<Bezier::Point> cp(4);
-    cp[0].set(120, 160, 0);
-    cp[1].set(35, 200, 0);
-    cp[2].set(220, 260, 0);
-    cp[3].set(220, 40, 0);
+    cp[0].set(120, 160);
+    cp[1].set(35, 200);
+    cp[2].set(220, 260);
+    cp[3].set(220, 40);
     Bezier::Bezier<3> bz(cp);
 
     Bezier::Point val = bz.valueAt(0);
@@ -239,9 +236,9 @@ void values_tests()
     FUZZY_COMPARE_POINT(val, 24.375, -537.5);
 
     std::vector<Bezier::Point> cp2(3);
-    cp2[0].set(70, 155, 0);
-    cp2[1].set(20, 110, 0);
-    cp2[2].set(100, 75, 0);
+    cp2[0].set(70, 155);
+    cp2[1].set(20, 110);
+    cp2[2].set(100, 75);
     Bezier::Bezier<2> bz2(cp2);
 
     val = bz2.valueAt(0);
@@ -263,10 +260,10 @@ void values_tests()
 void derivatives_tests()
 {
     std::vector<Bezier::Point> controlPoints3(4);
-    controlPoints3[0] = Bezier::Point(120, 160, 0);
-    controlPoints3[1] = Bezier::Point(35, 200, 0);
-    controlPoints3[2] = Bezier::Point(220, 260, 0);
-    controlPoints3[3] = Bezier::Point(220, 40, 0);
+    controlPoints3[0] = Bezier::Point(120, 160);
+    controlPoints3[1] = Bezier::Point(35, 200);
+    controlPoints3[2] = Bezier::Point(220, 260);
+    controlPoints3[3] = Bezier::Point(220, 40);
 
     Bezier::Bezier<3> bezier3(controlPoints3);
     Bezier::Bezier<2> bezier2 = bezier3.derivative();
