@@ -10,6 +10,10 @@
 #define BEZIER_SIZE_T_FORMAT "%zd"
 #endif
 
+#define BEZIER_FUZZY_EPSILON 0.001
+#define BEZIER_DEFAULT_INTERVALS 10
+#define BEZIER_DEFAULT_MAX_ITERATIONS 15
+
 namespace Bezier
 {
     namespace Math
@@ -30,6 +34,11 @@ namespace Bezier
         {
             assert(k <= n);
             return faculty(n) / (faculty(k) * faculty(n - k));
+        }
+
+        inline bool isWithinZeroAndOne(float x)
+        {
+            return x >= -BEZIER_FUZZY_EPSILON && x <= (1.0 + BEZIER_FUZZY_EPSILON);
         }
     }
 
@@ -213,9 +222,152 @@ namespace Bezier
             return Point(x / scale, y / scale);
         }
 
+        Point operator/(const Point& other) const
+        {
+            return Point(x / other.x, y / other.y);
+        }
+
+        bool fuzzyEquals(const Point& other) const
+        {
+            bool equals = true;
+            for (size_t axis = 0; axis < Point::size; axis++)
+            {
+                if (fabs((*this)[axis] - other[axis]) >= BEZIER_FUZZY_EPSILON)
+                {
+                    equals = false;
+                    break;
+                }
+            }
+            return equals;
+        }
+
+        bool isWithinZeroAndOne() const
+        {
+            return Math::isWithinZeroAndOne(x) && Math::isWithinZeroAndOne(y);
+        }
+
         float x;
         float y;
         static constexpr size_t size = 2;
+    };
+
+    struct ExtremeValue
+    {
+        ExtremeValue(float t, size_t axis)
+            : t(t)
+            , axis(axis)
+        {}
+
+        bool fuzzyEquals(const ExtremeValue& other) const
+        {
+            return axis == other.axis && fabs(t - other.t) < BEZIER_FUZZY_EPSILON;
+        }
+
+        const float t;
+        const size_t axis;
+    };
+
+    class ExtremeValues
+    {
+    public:
+        bool add(float t, size_t axis)
+        {
+            return add(ExtremeValue(t, axis));
+        }
+
+        bool add(const ExtremeValue& val)
+        {
+            assert(Math::isWithinZeroAndOne(val.t));
+            for (auto const &v : values)
+            {
+                if (val.fuzzyEquals(v))
+                    return false;
+            }
+            values.push_back(val);
+            return true;
+        }
+
+        size_t size() const
+        {
+            return values.size();
+        }
+
+        ExtremeValue& operator[](size_t idx)
+        {
+            assert(idx < values.size());
+            return values[idx];
+        }
+
+        ExtremeValue operator[](size_t idx) const
+        {
+            assert(idx < values.size());
+            return values[idx];
+        }
+
+    private:
+        std::vector<ExtremeValue> values;
+    };
+
+    struct ExtremePoint
+    {
+        ExtremePoint(float x, float y)
+            : point(x, y)
+        {}
+
+        ExtremePoint(const Point& p)
+            : point(p)
+        {}
+
+        ExtremePoint(const ExtremePoint& other)
+            : point(other.point)
+        {}
+
+        Point point;
+    };
+
+    class ExtremePoints
+    {
+    public:
+        bool add(float x, float y)
+        {
+            return add(ExtremePoint(x, y));
+        }
+
+        bool add(const Point& p)
+        {
+            return add(ExtremePoint(p));
+        }
+
+        bool add(const ExtremePoint& extremePoint)
+        {
+            for (auto const &ep : points)
+            {
+                if (extremePoint.point.fuzzyEquals(ep.point))
+                    return false;
+            }
+            points.push_back(extremePoint);
+            return true;
+        }
+
+        size_t size() const
+        {
+            return points.size();
+        }
+
+        ExtremePoint& operator[](size_t idx)
+        {
+            assert(idx < size());
+            return points[idx];
+        }
+
+        ExtremePoint operator[](size_t idx) const
+        {
+            assert(idx < size());
+            return points[idx];
+        }
+
+    private:
+        std::vector<ExtremePoint> points;
     };
 
     template <size_t N>
@@ -259,10 +411,9 @@ namespace Bezier
             // Note: derivative weights/control points are not actual control points.
             std::vector<Point> derivativeWeights(N);
             for (size_t i = 0; i < N; i++)
-                derivativeWeights[i] = Point((mControlPoints[i+1] - mControlPoints[i]) * N);
+                derivativeWeights[i].set(Point((mControlPoints[i+1] - mControlPoints[i]) * N));
 
-            Bezier<N-1> bezier(derivativeWeights);
-            return bezier;
+            return Bezier<N-1>(derivativeWeights);
         }
 
     public:
@@ -304,6 +455,37 @@ namespace Bezier
             return p;
         }
 
+        ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,
+                                     double epsilon = BEZIER_FUZZY_EPSILON,
+                                     size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const
+        {
+            switch (N)
+            {
+                case 1:
+                    return derivativeZero1();
+                case 2:
+                    return derivativeZero2();
+                case 3:
+//                    return derivativeZero3();
+                    return newtonRhapson(intervals, epsilon, maxIterations);
+                default:
+                    return newtonRhapson(intervals, epsilon, maxIterations);
+            }
+        }
+
+        ExtremePoints extremePoints() const
+        {
+            ExtremeValues xVals = derivativeZero();
+            xVals.add(0.0f, 0);
+            xVals.add(1.0f, 0);
+
+            ExtremePoints xPoints;
+            for (size_t i = 0; i < xVals.size(); i++)
+                xPoints.add(ExtremePoint(valueAt(xVals[i].t)));
+
+            return xPoints;
+        }
+
     public:
         Point& operator [](size_t pos)
         {
@@ -315,6 +497,78 @@ namespace Bezier
         {
             assert(pos < size());
             return mControlPoints[pos];
+        }
+
+    private:
+        ExtremeValues derivativeZero1() const
+        {
+            assert(N == 1);
+            return ExtremeValues();
+        }
+
+        ExtremeValues derivativeZero2() const
+        {
+            assert(N == 2);
+            ExtremeValues xVals;
+            Point roots = (mControlPoints[0] - mControlPoints[1]) / (mControlPoints[0] - mControlPoints[1] * 2 + mControlPoints[2]);
+            if (Math::isWithinZeroAndOne(roots[0]))
+                xVals.add(roots[0], 0);
+            if (Math::isWithinZeroAndOne(roots[1]))
+                xVals.add(roots[1], 1);
+            return xVals;
+        }
+
+        ExtremeValues derivativeZero3() const
+        {
+            // Note: NOT IMPLMENTED YET
+            assert(N == 3);
+            return ExtremeValues();
+        }
+
+        ExtremeValues newtonRhapson(size_t intervals = BEZIER_DEFAULT_INTERVALS,
+                                    double epsilon = BEZIER_FUZZY_EPSILON,
+                                    size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const
+        {
+            assert(N >= 2);
+            ExtremeValues xVals;
+            const double dt = 1.0 / (double) intervals;
+            const double absEpsilon = fabs(epsilon);
+            const Bezier<N-1> db = derivative();
+            const Bezier<N-2> ddb = db.derivative();
+
+            for (size_t i = 0; i < Point::size; i++)
+            {
+                double t = 0;
+
+                while(t <= 1.0)
+                {
+                    double zeroVal = t;
+                    size_t current_iter = 0;
+
+                    while (current_iter < maxIterations)
+                    {
+                        double dbVal = db.valueAt(zeroVal, i);
+                        double ddbVal = ddb.valueAt(zeroVal, i);
+                        double nextZeroVal = zeroVal - (dbVal / ddbVal);
+
+                        if (fabs(nextZeroVal - zeroVal) < absEpsilon)
+                        {
+                            if (Math::isWithinZeroAndOne(nextZeroVal))
+                            {
+                                xVals.add(nextZeroVal, i);
+                                break;
+                            }
+                        }
+
+                        zeroVal = nextZeroVal;
+                        current_iter++;
+                    }
+
+                    t += dt;
+                }
+            }
+
+            return xVals;
         }
 
     public:
