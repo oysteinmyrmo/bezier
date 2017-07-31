@@ -21,6 +21,7 @@
  */
 #include "bezier.h"
 #include "assert.h"
+#include "test_beziers.h"
 
 void binomial_tests()
 {
@@ -141,10 +142,6 @@ void binomial_tests()
     ASSERT_BINOMIAL_COEFFICIENT(20, 20, 1);
 }
 
-#define ASSERT_POLYNOMIAL_COEFFICIENTS(N, pos, a, b) \
-    BEZIER_ASSERT(Bezier::Bezier<N>::polynomialCoefficients[pos].one_minus_t  == a); \
-    BEZIER_ASSERT(Bezier::Bezier<N>::polynomialCoefficients[pos].t            == b);
-
 void polynomial_tests()
 {
     ASSERT_POLYNOMIAL_COEFFICIENTS(0, 0, 0, 0);
@@ -207,73 +204,45 @@ void control_points_tests()
 
 void values_tests()
 {
-    std::vector<Bezier::Point> cp(4);
-    cp[0].set(120, 160);
-    cp[1].set(35, 200);
-    cp[2].set(220, 260);
-    cp[3].set(220, 40);
-    Bezier::Bezier<3> bz(cp);
+    Bezier::Bezier<3> bezier3 = TestBeziers::Default::CubicBezier;
 
-    Bezier::Point val = bz.valueAt(0);
-    FUZZY_COMPARE_POINT(val, 120, 160);
+    Bezier::Point val = bezier3.valueAt(0);
+    FUZZY_ASSERT_POINT(val, 120, 160);
 
-    val = bz.valueAt(1);
-    FUZZY_COMPARE_POINT(val, 220, 40);
+    val = bezier3.valueAt(1);
+    FUZZY_ASSERT_POINT(val, 220, 40);
 
-    val = bz.valueAt(0.25);
-    FUZZY_COMPARE_POINT(val, 99.765625, 189.0625);
+    val = bezier3.valueAt(0.25);
+    FUZZY_ASSERT_POINT(val, 99.765625, 189.0625);
 
-    val = bz.valueAt(0.50);
-    FUZZY_COMPARE_POINT(val, 138.125, 197.5);
+    val = bezier3.valueAt(0.50);
+    FUZZY_ASSERT_POINT(val, 138.125, 197.5);
 
-    val = bz.valueAt(0.75);
-    FUZZY_COMPARE_POINT(val, 192.421875, 157.1875);
+    val = bezier3.valueAt(0.75);
+    FUZZY_ASSERT_POINT(val, 192.421875, 157.1875);
 
-    val = bz.valueAt(-0.35);
-    FUZZY_COMPARE_POINT(val, 327.983124, 138.212509);
+    val = bezier3.valueAt(-0.35);
+    FUZZY_ASSERT_POINT(val, 327.983124, 138.212509);
 
-    val = bz.valueAt(1.5);
-    FUZZY_COMPARE_POINT(val, 24.375, -537.5);
+    val = bezier3.valueAt(1.5);
+    FUZZY_ASSERT_POINT(val, 24.375, -537.5);
 
-    std::vector<Bezier::Point> cp2(3);
-    cp2[0].set(70, 155);
-    cp2[1].set(20, 110);
-    cp2[2].set(100, 75);
-    Bezier::Bezier<2> bz2(cp2);
+    Bezier::Bezier<2> bezier2 = TestBeziers::Default::QuadraticBezier;
 
-    val = bz2.valueAt(0);
-    FUZZY_COMPARE_POINT(val, 70, 155);
+    val = bezier2.valueAt(0);
+    FUZZY_ASSERT_POINT(val, 70, 155);
 
-    val = bz2.valueAt(1);
-    FUZZY_COMPARE_POINT(val, 100, 75);
+    val = bezier2.valueAt(1);
+    FUZZY_ASSERT_POINT(val, 100, 75);
 
-    val = bz2.valueAt(0.5);
-    FUZZY_COMPARE_POINT(val, 52.5, 112.5);
+    val = bezier2.valueAt(0.5);
+    FUZZY_ASSERT_POINT(val, 52.5, 112.5);
 
-    val = bz2.valueAt(-1.0);
-    FUZZY_COMPARE_POINT(val, 300, 255);
+    val = bezier2.valueAt(-1.0);
+    FUZZY_ASSERT_POINT(val, 300, 255);
 
-    val = bz2.valueAt(2.0);
-    FUZZY_COMPARE_POINT(val, 390, 15);
-}
-
-void derivatives_tests()
-{
-    std::vector<Bezier::Point> controlPoints3(4);
-    controlPoints3[0] = Bezier::Point(120, 160);
-    controlPoints3[1] = Bezier::Point(35, 200);
-    controlPoints3[2] = Bezier::Point(220, 260);
-    controlPoints3[3] = Bezier::Point(220, 40);
-
-    Bezier::Bezier<3> bezier3(controlPoints3);
-    Bezier::Bezier<2> bezier2 = bezier3.derivative();
-    Bezier::Bezier<1> bezier1 = bezier2.derivative();
-    Bezier::Bezier<0> bezier0 = bezier1.derivative();
-
-    assert(bezier3.size() == 4);
-    assert(bezier2.size() == 3);
-    assert(bezier1.size() == 2);
-    assert(bezier0.size() == 1);
+    val = bezier2.valueAt(2.0);
+    FUZZY_ASSERT_POINT(val, 390, 15);
 }
 
 int main()
@@ -282,7 +251,6 @@ int main()
     polynomial_tests();
     control_points_tests();
     values_tests();
-    derivatives_tests();
     return 0;
 }
 
