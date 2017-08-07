@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <math.h>
 #include <vector>
+#include <limits>
 
 // Cross platform define for printing size_t variables
 #ifdef __WIN32__
@@ -310,41 +311,19 @@ namespace Bezier
         std::vector<ExtremeValue> values;
     };
 
-    struct ExtremePoint
-    {
-        ExtremePoint(float x, float y)
-            : point(x, y)
-        {}
-
-        ExtremePoint(const Point& p)
-            : point(p)
-        {}
-
-        ExtremePoint(const ExtremePoint& other)
-            : point(other.point)
-        {}
-
-        Point point;
-    };
-
     class ExtremePoints
     {
     public:
         bool add(float x, float y)
         {
-            return add(ExtremePoint(x, y));
+            return add(Point(x, y));
         }
 
-        bool add(const Point& p)
-        {
-            return add(ExtremePoint(p));
-        }
-
-        bool add(const ExtremePoint& extremePoint)
+        bool add(const Point& extremePoint)
         {
             for (auto const &ep : points)
             {
-                if (extremePoint.point.fuzzyEquals(ep.point))
+                if (extremePoint.fuzzyEquals(ep))
                     return false;
             }
             points.push_back(extremePoint);
@@ -356,21 +335,114 @@ namespace Bezier
             return points.size();
         }
 
-        ExtremePoint& operator[](size_t idx)
+        Point& operator[](size_t idx)
         {
             assert(idx < size());
             return points[idx];
         }
 
-        ExtremePoint operator[](size_t idx) const
+        Point operator[](size_t idx) const
         {
             assert(idx < size());
             return points[idx];
         }
 
     private:
-        std::vector<ExtremePoint> points;
+        std::vector<Point> points;
     };
+
+    class AxisAlignedBoundingBox
+    {
+    public:
+        AxisAlignedBoundingBox(const Point& p0, const Point& p1, const Point& p2, const Point& p3)
+            : points{{p0}, {p1}, {p2}, {p3}}
+        {}
+
+        AxisAlignedBoundingBox(const ExtremePoints& xPoints)
+        {
+            if (!xPoints.size())
+                return;
+
+            float minX = std::numeric_limits<float>::max();
+            float maxX = -std::numeric_limits<float>::max();
+            float minY = std::numeric_limits<float>::max();
+            float maxY = -std::numeric_limits<float>::max();
+
+            for (size_t i = 0; i < xPoints.size(); i++)
+            {
+                if (xPoints[i].x > maxX)
+                    maxX = xPoints[i].x;
+                if (xPoints[i].x < minX)
+                    minX = xPoints[i].x;
+                if (xPoints[i].y > maxY)
+                    maxY = xPoints[i].y;
+                if (xPoints[i].y < minY)
+                    minY = xPoints[i].y;
+            }
+
+            points[0].set(minX, minY);
+            points[1].set(minX, maxY);
+            points[2].set(maxX, maxY);
+            points[3].set(maxX, minY);
+        }
+
+        static constexpr size_t size()
+        {
+            return 4;
+        }
+
+        float minX() const
+        {
+            return points[0].x;
+        }
+
+        float maxX() const
+        {
+            return points[2].x;
+        }
+
+        float minY() const
+        {
+            return points[0].y;
+        }
+
+        float maxY() const
+        {
+            return points[2].y;
+        }
+
+        float width() const
+        {
+            return maxX() - minX();
+        }
+
+        float height() const
+        {
+            return maxY() - minY();
+        }
+
+        float area() const
+        {
+            return ((double) width() * (double) height());
+        }
+
+        Point& operator[](size_t idx)
+        {
+            assert(idx < size());
+            return points[idx];
+        }
+
+        Point operator[](size_t idx) const
+        {
+            assert(idx < size());
+            return points[idx];
+        }
+
+    private:
+        Point points[4]; // Starting in lower left corner, going clock-wise.
+    };
+
+    typedef AxisAlignedBoundingBox AABB;
 
     template <size_t N>
     class Bezier
@@ -483,9 +555,19 @@ namespace Bezier
 
             ExtremePoints xPoints;
             for (size_t i = 0; i < xVals.size(); i++)
-                xPoints.add(ExtremePoint(valueAt(xVals[i].t)));
+                xPoints.add(valueAt(xVals[i].t));
 
             return xPoints;
+        }
+
+        AxisAlignedBoundingBox aabb() const
+        {
+            return AxisAlignedBoundingBox(extremePoints());
+        }
+
+        AxisAlignedBoundingBox aabb(const ExtremePoints& xPoints) const
+        {
+            return AxisAlignedBoundingBox(xPoints);
         }
 
     public:
