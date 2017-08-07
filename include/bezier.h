@@ -65,18 +65,19 @@ namespace Bezier
             }
         }
 
-        const size_t size() const
+        static constexpr size_t size()
         {
             return N + 1;
         }
 
-        const size_t operator [](size_t pos) const
+        const size_t operator [](size_t idx) const
         {
-            return mCoefficients[pos];
+            assert(idx < size());
+            return mCoefficients[idx];
         }
 
     private:
-        float mCoefficients[N+1];
+        float mCoefficients[size()];
     };
 
     struct PolynomialPair
@@ -110,18 +111,19 @@ namespace Bezier
             return mPolynomialPairs[pos].valueAt(t);
         }
 
-        const size_t size() const
+        static constexpr size_t size()
         {
             return N + 1;
         }
 
-        const PolynomialPair& operator [](size_t pos) const
+        const PolynomialPair& operator [](size_t idx) const
         {
-            return mPolynomialPairs[pos];
+            assert(idx < size());
+            return mPolynomialPairs[idx];
         }
 
     private:
-        PolynomialPair mPolynomialPairs[N+1];
+        PolynomialPair mPolynomialPairs[size()];
     };
 
     class Point
@@ -487,16 +489,16 @@ namespace Bezier
         }
 
     public:
-        Point& operator [](size_t pos)
+        Point& operator [](size_t idx)
         {
-            assert(pos < size());
-            return mControlPoints[pos];
+            assert(idx < size());
+            return mControlPoints[idx];
         }
 
-        Point operator [](size_t pos) const
+        Point operator [](size_t idx) const
         {
-            assert(pos < size());
-            return mControlPoints[pos];
+            assert(idx < size());
+            return mControlPoints[idx];
         }
 
     private:
