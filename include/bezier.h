@@ -480,7 +480,7 @@ namespace Bezier
 
         Bezier<N-1> derivative() const
         {
-            assert(N > 0);
+            assert(N != 0);
 
             // Note: derivative weights/control points are not actual control points.
             std::vector<Point> derivativeWeights(N);
