@@ -11,7 +11,7 @@
 #define BEZIER_SIZE_T_FORMAT "%zd"
 #endif
 
-#define BEZIER_FUZZY_EPSILON 0.001
+#define BEZIER_FUZZY_EPSILON 0.0001
 #define BEZIER_DEFAULT_INTERVALS 10
 #define BEZIER_DEFAULT_MAX_ITERATIONS 15
 
@@ -253,6 +253,37 @@ namespace Bezier
         float y;
         static constexpr size_t size = 2;
     };
+
+    class Normal : public Point
+    {
+    public:
+        Normal()
+            : Point()
+        {}
+
+        Normal(float x, float y, bool normalize = true)
+            : Point(x, y)
+        {
+            if (normalize)
+                Point::normalize();
+        }
+
+        Normal(const Point& point, bool normalize = true)
+            : Normal(point.x, point.y, normalize)
+        {}
+
+        float angle() const
+        {
+            return atan2(y, x);
+        }
+
+        float angleDeg() const
+        {
+            return angle() * 180.0 / M_PI;
+        }
+    };
+
+    typedef Normal Tangent;
 
     struct ExtremeValue
     {
@@ -511,7 +542,7 @@ namespace Bezier
             return p;
         }
 
-        Point tangentAt(float t, bool normalize = true) const
+        Tangent tangentAt(float t, bool normalize = true) const
         {
             Point p;
             Bezier<N-1> derivative = this->derivative();
@@ -521,12 +552,10 @@ namespace Bezier
             return p;
         }
 
-        Point normalAt(float t, bool normalize = true) const
+        Normal normalAt(float t, bool normalize = true) const
         {
-            Point p;
             Point tangent = tangentAt(t, normalize);
-            p.set(-tangent.y, tangent.x);
-            return p;
+            return Normal(-tangent.y, tangent.x, normalize);
         }
 
         ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,

@@ -70,7 +70,7 @@ void extreme_values_tests()
 
     Bezier::ExtremePoints xPoints = bezier3.extremePoints();
     BEZIER_ASSERT(xPoints.size() == 4);
-    FUZZY_ASSERT_POINT(xPoints[0], 97.6645355, 182.555511);
+    FUZZY_ASSERT_POINT(xPoints[0], 97.6645355, 182.555649);
     FUZZY_ASSERT_POINT(xPoints[1], 220.0, 40.0);
     FUZZY_ASSERT_POINT(xPoints[2], 125.442337, 198.86235);
     FUZZY_ASSERT_POINT(xPoints[3], 120.0, 160.0);
@@ -108,10 +108,73 @@ void extreme_values_tests()
     FUZZY_ASSERT(aabb.area(), 3938.46191);
 }
 
+void tangents_tests()
+{
+    Bezier::Bezier<3> bezier3 = TestBeziers::Default::CubicBezier;
+    Bezier::ExtremeValues xVals = bezier3.derivativeZero();
+    Bezier::Tangent tangent;
+    BEZIER_ASSERT(xVals.size() == 3);
+
+    tangent = bezier3.tangentAt(0.0);
+    FUZZY_ASSERT(tangent.x, -0.904818713);
+    FUZZY_ASSERT(tangent.y, 0.425797045);
+    FUZZY_ASSERT(tangent.angle(), 2.70175004);
+    FUZZY_ASSERT(tangent.angleDeg(), 154.798874);
+
+    tangent = bezier3.tangentAt(0.25);
+    FUZZY_ASSERT(tangent.x, 0.567925274);
+    FUZZY_ASSERT(tangent.y, 0.823080122);
+    FUZZY_ASSERT(tangent.angle(), 0.966813385);
+    FUZZY_ASSERT(tangent.angleDeg(), 55.3943253);
+
+    tangent = bezier3.tangentAt(0.50);
+    FUZZY_ASSERT(tangent.x, 0.978549778);
+    FUZZY_ASSERT(tangent.y, -0.206010476);
+    FUZZY_ASSERT(tangent.angle(), -0.207496226);
+    FUZZY_ASSERT(tangent.angleDeg(), -11.8886576);
+
+    tangent = bezier3.tangentAt(0.75);
+    FUZZY_ASSERT(tangent.x, 0.544241607);
+    FUZZY_ASSERT(tangent.y, -0.83892852);
+    FUZZY_ASSERT(tangent.angle(), -0.995311498);
+    FUZZY_ASSERT(tangent.angleDeg(), -57.0271492);
+
+    tangent = bezier3.tangentAt(0.666);
+    FUZZY_ASSERT(tangent.x, 0.738803029);
+    FUZZY_ASSERT(tangent.y, -0.673921466);
+    FUZZY_ASSERT(tangent.angle(), -0.73950386);
+    FUZZY_ASSERT(tangent.angleDeg(), -42.3704491);
+
+    tangent = bezier3.tangentAt(0.333);
+    FUZZY_ASSERT(tangent.x, 0.911237537);
+    FUZZY_ASSERT(tangent.y, 0.411881238);
+    FUZZY_ASSERT(tangent.angle(), 0.424517602);
+    FUZZY_ASSERT(tangent.angleDeg(), 24.3230667);
+
+    tangent = bezier3.tangentAt(xVals[0].t);
+    FUZZY_ASSERT(tangent.x, 0);
+    FUZZY_ASSERT(tangent.y, 1);
+    FUZZY_ASSERT(tangent.angle(), M_PI_2);
+    FUZZY_ASSERT(tangent.angleDeg(), 90.0);
+
+    tangent = bezier3.tangentAt(xVals[1].t);
+    FUZZY_ASSERT(tangent.x, 0);
+    FUZZY_ASSERT(tangent.y, -1);
+    FUZZY_ASSERT(tangent.angle(), -M_PI_2);
+    FUZZY_ASSERT(tangent.angleDeg(), -90.0);
+
+    tangent = bezier3.tangentAt(xVals[2].t);
+    FUZZY_ASSERT(tangent.x, 1);
+    FUZZY_ASSERT(tangent.y, 0);
+    FUZZY_ASSERT(tangent.angle(), 0);
+    FUZZY_ASSERT(tangent.angleDeg(), 0);
+}
+
 int main()
 {
     derivatives_tests();
     extreme_values_tests();
+    tangents_tests();
 
     return 0;
 }
