@@ -170,11 +170,74 @@ void tangents_tests()
     FUZZY_ASSERT(tangent.angleDeg(), 0.0);
 }
 
+void normals_tests()
+{
+    Bezier::Bezier<3> bezier3 = TestBeziers::Default::CubicBezier;
+    Bezier::ExtremeValues xVals = bezier3.derivativeZero();
+    Bezier::Normal normal;
+    BEZIER_ASSERT(xVals.size() == 3);
+
+    normal = bezier3.normalAt(0.0);
+    FUZZY_ASSERT(normal.x, -0.425797045);
+    FUZZY_ASSERT(normal.y, -0.904818713);
+    FUZZY_ASSERT(normal.angle(), -2.01063895);
+    FUZZY_ASSERT(normal.angleDeg(), -115.201126);
+
+    normal = bezier3.normalAt(0.25);
+    FUZZY_ASSERT(normal.x, -0.823080122);
+    FUZZY_ASSERT(normal.y, 0.567925274);
+    FUZZY_ASSERT(normal.angle(), 2.53760958);
+    FUZZY_ASSERT(normal.angleDeg(), 145.394318);
+
+    normal = bezier3.normalAt(0.50);
+    FUZZY_ASSERT(normal.x, 0.206010476);
+    FUZZY_ASSERT(normal.y, 0.978549778);
+    FUZZY_ASSERT(normal.angle(), 1.36330009);
+    FUZZY_ASSERT(normal.angleDeg(), 78.1113433);
+
+    normal = bezier3.normalAt(0.75);
+    FUZZY_ASSERT(normal.x, 0.83892852);
+    FUZZY_ASSERT(normal.y, 0.544241607);
+    FUZZY_ASSERT(normal.angle(), 0.575484872);
+    FUZZY_ASSERT(normal.angleDeg(), 32.9728546);
+
+    normal = bezier3.normalAt(0.666);
+    FUZZY_ASSERT(normal.x, 0.673921466);
+    FUZZY_ASSERT(normal.y, 0.738803029);
+    FUZZY_ASSERT(normal.angle(), 0.83129245);
+    FUZZY_ASSERT(normal.angleDeg(), 47.6295471);
+
+    normal = bezier3.normalAt(0.333);
+    FUZZY_ASSERT(normal.x, -0.411881238);
+    FUZZY_ASSERT(normal.y, 0.911237537);
+    FUZZY_ASSERT(normal.angle(), 1.99531388);
+    FUZZY_ASSERT(normal.angleDeg(), 114.323067);
+
+    normal = bezier3.normalAt(xVals[0].t);
+    FUZZY_ASSERT(normal.x, -1.0);
+    FUZZY_ASSERT(normal.y, 0.0);
+    FUZZY_ASSERT(normal.angle(), M_PI);
+    FUZZY_ASSERT(normal.angleDeg(), 180.0);
+
+    normal = bezier3.normalAt(xVals[1].t);
+    FUZZY_ASSERT(normal.x, 1.0);
+    FUZZY_ASSERT(normal.y, 0.0);
+    FUZZY_ASSERT(normal.angle(), 0.0);
+    FUZZY_ASSERT(normal.angleDeg(), 0.0);
+
+    normal = bezier3.normalAt(xVals[2].t);
+    FUZZY_ASSERT(normal.x, 0.0);
+    FUZZY_ASSERT(normal.y, 1.0);
+    FUZZY_ASSERT(normal.angle(), M_PI_2);
+    FUZZY_ASSERT(normal.angleDeg(), 90.0);
+}
+
 int main()
 {
     derivatives_tests();
     extreme_values_tests();
     tangents_tests();
+    normals_tests();
 
     return 0;
 }
