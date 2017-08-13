@@ -152,22 +152,22 @@ void tangents_tests()
     FUZZY_ASSERT(tangent.angleDeg(), 24.3230667);
 
     tangent = bezier3.tangentAt(xVals[0].t);
-    FUZZY_ASSERT(tangent.x, 0);
-    FUZZY_ASSERT(tangent.y, 1);
+    FUZZY_ASSERT(tangent.x, 0.0);
+    FUZZY_ASSERT(tangent.y, 1.0);
     FUZZY_ASSERT(tangent.angle(), M_PI_2);
     FUZZY_ASSERT(tangent.angleDeg(), 90.0);
 
     tangent = bezier3.tangentAt(xVals[1].t);
-    FUZZY_ASSERT(tangent.x, 0);
-    FUZZY_ASSERT(tangent.y, -1);
+    FUZZY_ASSERT(tangent.x, 0.0);
+    FUZZY_ASSERT(tangent.y, -1.0);
     FUZZY_ASSERT(tangent.angle(), -M_PI_2);
     FUZZY_ASSERT(tangent.angleDeg(), -90.0);
 
     tangent = bezier3.tangentAt(xVals[2].t);
-    FUZZY_ASSERT(tangent.x, 1);
-    FUZZY_ASSERT(tangent.y, 0);
-    FUZZY_ASSERT(tangent.angle(), 0);
-    FUZZY_ASSERT(tangent.angleDeg(), 0);
+    FUZZY_ASSERT(tangent.x, 1.0);
+    FUZZY_ASSERT(tangent.y, 0.0);
+    FUZZY_ASSERT(tangent.angle(), 0.0);
+    FUZZY_ASSERT(tangent.angleDeg(), 0.0);
 }
 
 int main()
