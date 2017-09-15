@@ -127,22 +127,34 @@ namespace Bezier
         PolynomialPair mPolynomialPairs[size()];
     };
 
-    class Point
+    class Vec2
     {
     public:
-        Point()
+        Vec2()
             : x(0)
             , y(0)
         {}
 
-        Point(float x, float y)
+        Vec2(float x, float y)
             : x(x)
             , y(y)
         {}
 
-        Point(const Point& other)
+        Vec2(float x, float y, bool normalize)
+            : x(x)
+            , y(y)
+        {
+            if (normalize)
+                this->normalize();
+        }
+
+        Vec2(const Vec2& other)
             : x(other.x)
             , y(other.y)
+        {}
+
+        Vec2(const Vec2& other, bool normalize)
+            : Vec2(other.x, other.y, normalize)
         {}
 
         void set(float x, float y)
@@ -151,7 +163,7 @@ namespace Bezier
             this->y = y;
         }
 
-        void set(const Point& other)
+        void set(const Vec2& other)
         {
             this->x = other.x;
             this->y = other.y;
@@ -175,9 +187,19 @@ namespace Bezier
             y /= len;
         }
 
+        float angle() const
+        {
+            return atan2(y, x);
+        }
+
+        float angleDeg() const
+        {
+            return angle() * 180.0 / M_PI;
+        }
+
         float operator[](size_t axis) const
         {
-            assert(axis < Point::size);
+            assert(axis < Vec2::size);
             switch (axis)
             {
                 case 0:
@@ -192,7 +214,7 @@ namespace Bezier
 
         float& operator[](size_t axis)
         {
-            assert(axis < Point::size);
+            assert(axis < Vec2::size);
             switch (axis)
             {
                 case 0:
@@ -205,35 +227,35 @@ namespace Bezier
             }
         }
 
-        Point operator+(const Point& other) const
+        Vec2 operator+(const Vec2& other) const
         {
-            return Point(x + other.x, y + other.y);
+            return Vec2(x + other.x, y + other.y);
         }
 
-        Point operator-(const Point& other) const
+        Vec2 operator-(const Vec2& other) const
         {
-            return Point(x - other.x, y - other.y);
+            return Vec2(x - other.x, y - other.y);
         }
 
-        Point operator*(double scale) const
+        Vec2 operator*(double scale) const
         {
-            return Point(x * scale, y * scale);
+            return Vec2(x * scale, y * scale);
         }
 
-        Point operator/(double scale) const
+        Vec2 operator/(double scale) const
         {
-            return Point(x / scale, y / scale);
+            return Vec2(x / scale, y / scale);
         }
 
-        Point operator/(const Point& other) const
+        Vec2 operator/(const Vec2& other) const
         {
-            return Point(x / other.x, y / other.y);
+            return Vec2(x / other.x, y / other.y);
         }
 
-        bool fuzzyEquals(const Point& other) const
+        bool fuzzyEquals(const Vec2& other) const
         {
             bool equals = true;
-            for (size_t axis = 0; axis < Point::size; axis++)
+            for (size_t axis = 0; axis < Vec2::size; axis++)
             {
                 if (fabs((*this)[axis] - other[axis]) >= BEZIER_FUZZY_EPSILON)
                 {
@@ -254,36 +276,9 @@ namespace Bezier
         static constexpr size_t size = 2;
     };
 
-    class Normal : public Point
-    {
-    public:
-        Normal()
-            : Point()
-        {}
-
-        Normal(float x, float y, bool normalize = true)
-            : Point(x, y)
-        {
-            if (normalize)
-                Point::normalize();
-        }
-
-        Normal(const Point& point, bool normalize = true)
-            : Normal(point.x, point.y, normalize)
-        {}
-
-        float angle() const
-        {
-            return atan2(y, x);
-        }
-
-        float angleDeg() const
-        {
-            return angle() * 180.0 / M_PI;
-        }
-    };
-
-    typedef Normal Tangent;
+    typedef Vec2 Point;
+    typedef Vec2 Normal;
+    typedef Vec2 Tangent;
 
     struct ExtremeValue
     {
