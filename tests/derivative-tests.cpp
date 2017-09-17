@@ -85,6 +85,16 @@ void extreme_values_tests()
     FUZZY_ASSERT(aabb.height(), 158.86235);
     FUZZY_ASSERT(aabb.area(), 19434.5);
 
+    Bezier::TBB tbb = bezier3.tbb();
+    BEZIER_ASSERT(tbb.size() == 4);
+    FUZZY_ASSERT(tbb.minX(), 92.568962);
+    FUZZY_ASSERT(tbb.maxX(), 261.989441);
+    FUZZY_ASSERT(tbb.minY(), 36.2565613);
+    FUZZY_ASSERT(tbb.maxY(), 222.517883);
+    FUZZY_ASSERT(tbb.width(), 60.5054359);
+    FUZZY_ASSERT(tbb.height(), 192.036713);
+    FUZZY_ASSERT(tbb.area(), 11619.2646);
+
     Bezier::Bezier<2> bezier2 = TestBeziers::Default::QuadraticBezier;
 
     xVals = bezier2.derivativeZero();
@@ -106,6 +116,16 @@ void extreme_values_tests()
     FUZZY_ASSERT(aabb.width(), 49.2307739);
     FUZZY_ASSERT(aabb.height(), 80.0);
     FUZZY_ASSERT(aabb.area(), 3938.46191);
+
+    tbb = bezier2.tbb();
+    BEZIER_ASSERT(tbb.size() == 4);
+    FUZZY_ASSERT(tbb.minX(), 40.6849289);
+    FUZZY_ASSERT(tbb.maxX(), 100);
+    FUZZY_ASSERT(tbb.minY(), 64.0068511);
+    FUZZY_ASSERT(tbb.maxY(), 155.0);
+    FUZZY_ASSERT(tbb.width(), 31.3085079);
+    FUZZY_ASSERT(tbb.height(), 85.4400406);
+    FUZZY_ASSERT(tbb.area(), 2675.00024);
 }
 
 void tangents_tests()

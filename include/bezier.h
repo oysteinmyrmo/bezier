@@ -187,6 +187,27 @@ namespace Bezier
             y /= len;
         }
 
+        void translate(const Vec2& distance)
+        {
+            x += distance.x;
+            y += distance.y;
+        }
+
+        void rotate(double angle, const Vec2& pivot = Vec2(0, 0))
+        {
+            double s = sin(angle);
+            double c = cos(angle);
+
+            x -= pivot.x;
+            y -= pivot.y;
+
+            double xnew = x * c - y * s;
+            double ynew = x * s + y * c;
+
+            x = xnew + pivot.x;
+            y = ynew + pivot.y;
+        }
+
         float angle() const
         {
             return atan2(y, x);
@@ -235,6 +256,11 @@ namespace Bezier
         Vec2 operator-(const Vec2& other) const
         {
             return Vec2(x - other.x, y - other.y);
+        }
+
+        Vec2 operator-() const
+        {
+            return Vec2(-x, -y);
         }
 
         Vec2 operator*(double scale) const
@@ -361,6 +387,11 @@ namespace Bezier
             return points.size();
         }
 
+        bool empty() const
+        {
+            return !size();
+        }
+
         Point& operator[](size_t idx)
         {
             assert(idx < size());
@@ -470,6 +501,109 @@ namespace Bezier
 
     typedef AxisAlignedBoundingBox AABB;
 
+    class TightBoundingBox
+    {
+    public:
+        // Takes the ExtremePoints of the Bezier curve moved to origo and rotated to align the x-axis
+        // as arguments as well as the translation/rotation used to calculate it.
+        TightBoundingBox(const ExtremePoints& xPoints, const Vec2& translation, double rotation)
+        {
+            float minX = std::numeric_limits<float>::max();
+            float maxX = -std::numeric_limits<float>::max();
+            float minY = std::numeric_limits<float>::max();
+            float maxY = -std::numeric_limits<float>::max();
+
+            for (size_t i = 0; i < xPoints.size(); i++)
+            {
+                if (xPoints[i].x > maxX)
+                    maxX = xPoints[i].x;
+                if (xPoints[i].x < minX)
+                    minX = xPoints[i].x;
+                if (xPoints[i].y > maxY)
+                    maxY = xPoints[i].y;
+                if (xPoints[i].y < minY)
+                    minY = xPoints[i].y;
+            }
+
+            points[0].set(minX, minY);
+            points[1].set(minX, maxY);
+            points[2].set(maxX, maxY);
+            points[3].set(maxX, minY);
+
+            if (xPoints.empty())
+                return;
+
+            for (size_t i = 0; i < 4; i++)
+            {
+                points[i].rotate(-rotation);
+                points[i].translate(-translation);
+            }
+        }
+
+        static constexpr size_t size()
+        {
+            return 4;
+        }
+
+        float minX() const
+        {
+            return std::min({points[0].x, points[1].x, points[2].x, points[3].x});
+        }
+
+        float maxX() const
+        {
+            return std::max({points[0].x, points[1].x, points[2].x, points[3].x});
+        }
+
+        float minY() const
+        {
+            return std::min({points[0].y, points[1].y, points[2].y, points[3].y});
+        }
+
+        float maxY() const
+        {
+            return std::max({points[0].y, points[1].y, points[2].y, points[3].y});
+        }
+
+        float area() const
+        {
+            return width() * height();
+        }
+
+        // Uses the two first points to calculate the "width".
+        float width() const
+        {
+            double x = points[1].x - points[0].x;
+            double y = points[1].y - points[0].y;
+            return sqrt(x * x + y * y);
+        }
+
+        // Uses the second and third points to calculate the "height".
+        float height() const
+        {
+            double x = points[2].x - points[1].x;
+            double y = points[2].y - points[1].y;
+            return sqrt(x * x + y * y);
+        }
+
+        Point& operator[](size_t idx)
+        {
+            assert(idx < size());
+            return points[idx];
+        }
+
+        Point operator[](size_t idx) const
+        {
+            assert(idx < size());
+            return points[idx];
+        }
+
+    private:
+        Point points[4]; // The points are ordered in a clockwise manner.
+    };
+
+    typedef TightBoundingBox TBB;
+
     template <size_t N>
     class Bezier
     {
@@ -553,6 +687,22 @@ namespace Bezier
             return Normal(-tangent.y, tangent.x, normalize);
         }
 
+        void translate(const Vec2& distance)
+        {
+            for (size_t i = 0; i < N+1; i++)
+            {
+                mControlPoints[i].translate(distance);
+            }
+        }
+
+        void rotate(double angle, Vec2 pivot = Vec2(0, 0))
+        {
+            for (size_t i = 0; i < N+1; i++)
+            {
+                mControlPoints[i].rotate(angle, pivot);
+            }
+        }
+
         ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,
                                      double epsilon = BEZIER_FUZZY_EPSILON,
                                      size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const
@@ -592,6 +742,21 @@ namespace Bezier
         AxisAlignedBoundingBox aabb(const ExtremePoints& xPoints) const
         {
             return AxisAlignedBoundingBox(xPoints);
+        }
+
+        TightBoundingBox tbb() const
+        {
+            Bezier<N> bezier = *this;
+
+            // Translate last control point (highest order) to origo.
+            Vec2 translation(-bezier[N]);
+            bezier.translate(translation);
+
+            // Rotate bezier to align the first control point (lowest order) with the x-axis
+            double angle = -bezier[0].angle();
+            bezier.rotate(angle);
+
+            return TightBoundingBox(bezier.extremePoints(), translation, angle);
         }
 
     public:
