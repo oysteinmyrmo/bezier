@@ -417,9 +417,6 @@ namespace Bezier
 
         AxisAlignedBoundingBox(const ExtremePoints& xPoints)
         {
-            if (!xPoints.size())
-                return;
-
             float minX = std::numeric_limits<float>::max();
             float maxX = -std::numeric_limits<float>::max();
             float minY = std::numeric_limits<float>::max();
