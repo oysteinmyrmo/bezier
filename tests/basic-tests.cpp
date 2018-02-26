@@ -197,7 +197,7 @@ void control_points_tests()
     assert(bezier2[0].x == 1.0f);
     assert(bezier2[0].y == 2.0f);
 
-    p.move(1, -1);
+    p.translate(1, -1);
     assert(bezier2[0].x == 2.0f);
     assert(bezier2[0].y == 1.0f);
 }

@@ -169,12 +169,6 @@ namespace Bezier
             this->y = other.y;
         }
 
-        void move(float dx, float dy)
-        {
-            x += dx;
-            y += dy;
-        }
-
         double length() const
         {
             return sqrt(x*x + y*y);
@@ -185,6 +179,12 @@ namespace Bezier
             double len = length();
             x /= len;
             y /= len;
+        }
+
+        void translate(float dx, float dy)
+        {
+            x += dx;
+            y += dy;
         }
 
         void translate(const Vec2& distance)
@@ -689,6 +689,14 @@ namespace Bezier
             for (size_t i = 0; i < N+1; i++)
             {
                 mControlPoints[i].translate(distance);
+            }
+        }
+
+        void translate(float dx, float dy)
+        {
+            for (size_t i = 0; i < N+1; i++)
+            {
+                mControlPoints[i].translate(dx, dy);
             }
         }
 
