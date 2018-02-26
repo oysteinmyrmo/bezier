@@ -245,12 +245,114 @@ void values_tests()
     FUZZY_ASSERT_POINT(val, 390, 15);
 }
 
+// The test that exists in README.md, because it should be correct.
+void readme_tests()
+{
+    // Create a cubic bezier with 4 points. Visualized at https://www.desmos.com/calculator/fivneeogmh
+    Bezier::Bezier<3> cubicBezier({ {120, 160}, {35, 200}, {220, 260}, {220, 40} });
+
+    // Get coordinates on the curve from a value between 0 and 1 (values outside this range are also valid because of the way bezier curves are defined).
+    Bezier::Point p;
+    p = cubicBezier.valueAt(0);     // (120, 60)
+    FUZZY_ASSERT_POINT(p, 120, 160);
+    p = cubicBezier.valueAt(0.5);   // (138.125, 197.5)
+    FUZZY_ASSERT_POINT(p, 138.125, 197.5);
+
+    // Get coordinate values for a single axis. Currently only supports 2D.
+    double value;
+    value = cubicBezier.valueAt(1, 0);    // 220 (x-coordinate at t = 1)
+    FUZZY_ASSERT(value, 220);
+    value = cubicBezier.valueAt(0.75, 1); // 157.1875 (y-coordinate at t = 0.75)
+    FUZZY_ASSERT(value, 157.1875);
+
+    // Translate and rotate Bezier curves.
+    Bezier::Bezier<3> copy = cubicBezier;
+    copy.translate(10, 15);      // Translate 10 in x-direction, 15 in y-direction
+    FUZZY_ASSERT(copy.valueAt(0, 0), 130);
+    FUZZY_ASSERT(copy.valueAt(0, 1), 175);
+    copy.rotate(0.5);            // Rotate 0.5 radians around the origin
+    copy.rotate(3.14, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
+
+    // Get normals along the bezier curve.
+    Bezier::Normal normal = cubicBezier.normalAt(0.75); // Get normalized normal at t = 0.75. Add false as second argument to disable normalization.
+    float angle = normal.angle();       // Angle in radians
+    float angleDeg = normal.angleDeg(); // Angle in degrees
+    FUZZY_ASSERT(normal.x, 0.83892852);
+    FUZZY_ASSERT(normal.y, 0.544241607);
+    FUZZY_ASSERT(angle, 0.575484872);
+    FUZZY_ASSERT(angleDeg, 32.9728546);
+
+    // Get tangents along the bezier curve.
+    Bezier::Tangent tangent = cubicBezier.tangentAt(0.25); // Get normalized tangent at t = 0.25. Add false as second argument to disable normalization.
+    angle = tangent.angle();       // Angle in radians
+    angleDeg = tangent.angleDeg(); // Angle in degrees
+    FUZZY_ASSERT(tangent.x, 0.567925274);
+    FUZZY_ASSERT(tangent.y, 0.823080122);
+    FUZZY_ASSERT(angle, 0.966813385);
+    FUZZY_ASSERT(angleDeg, 55.3943253);
+
+    // Get derivatives of the Bezier curve, resulting in a Bezier curve of one order less.
+    Bezier::Bezier<2> db  = cubicBezier.derivative(); // First derivative
+    Bezier::Bezier<1> ddb = db.derivative();          // Second derivative
+    FUZZY_ASSERT_POINT(db[0], -255, 120);
+    FUZZY_ASSERT_POINT(db[1], 555, 180);
+    FUZZY_ASSERT_POINT(db[2], 0, -660);
+    FUZZY_ASSERT_POINT(ddb[0], 1620, 120);
+    FUZZY_ASSERT_POINT(ddb[1], -1110, -1680);
+
+    // Get extreme values of the Bezier curves.
+    Bezier::ExtremeValues xVals = cubicBezier.derivativeZero();  // Contains 3 extreme value locations: t = 0.186811984, t = 1.0 and t = 0.437850952
+    BEZIER_ASSERT(xVals.size() == 3);
+    FUZZY_ASSERT(xVals[0].t, 0.186811984);
+    FUZZY_ASSERT(xVals[1].t, 1.0);
+    FUZZY_ASSERT(xVals[2].t, 0.437850952);
+    Bezier::ExtremeValue const& xVal = xVals[0];                 // Contains t value and axis for the first extreme value
+    Bezier::Point xValCoord = cubicBezier.valueAt(xVal.t);       // Get the coordinates for the first extreme value (97.6645355, 182.55565)
+    FUZZY_ASSERT(xValCoord.x, 97.6645355);
+    FUZZY_ASSERT(xValCoord.y, 182.555649);
+    Bezier::ExtremePoints xPoints = cubicBezier.extremePoints(); // Or get all the extreme points directly (includes 0 and 1)
+    FUZZY_ASSERT_POINT(xPoints[0], 97.6645355, 182.55565);
+    FUZZY_ASSERT_POINT(xPoints[1], 220, 40);
+    FUZZY_ASSERT_POINT(xPoints[2], 125.442337, 198.86235);
+    FUZZY_ASSERT_POINT(xPoints[3], 120, 160);
+
+    // Get bounding boxes of the Bezier curves.
+    Bezier::AABB aabb = cubicBezier.aabb();             // Axis Aligned Bounding Box
+    BEZIER_ASSERT(aabb.size() == 4);
+    FUZZY_ASSERT(aabb.minX(), 97.6645355);
+    FUZZY_ASSERT(aabb.maxX(), 220.0);
+    FUZZY_ASSERT(aabb.minY(), 40.0);
+    FUZZY_ASSERT(aabb.maxY(), 198.86235);
+    FUZZY_ASSERT(aabb.width(), 122.335464);
+    FUZZY_ASSERT(aabb.height(), 158.86235);
+    FUZZY_ASSERT(aabb.area(), 19434.5);
+    aabb = cubicBezier.aabb(xPoints);                   // Or get from extreme points (if you already have them) to reduce calculation time
+    BEZIER_ASSERT(aabb.size() == 4);
+    FUZZY_ASSERT(aabb.minX(), 97.6645355);
+    FUZZY_ASSERT(aabb.maxX(), 220.0);
+    FUZZY_ASSERT(aabb.minY(), 40.0);
+    FUZZY_ASSERT(aabb.maxY(), 198.86235);
+    FUZZY_ASSERT(aabb.width(), 122.335464);
+    FUZZY_ASSERT(aabb.height(), 158.86235);
+    FUZZY_ASSERT(aabb.area(), 19434.5);
+    Bezier::TightBoundingBox tbb = cubicBezier.tbb();   // Tight bounding box
+    BEZIER_ASSERT(tbb.size() == 4);
+    FUZZY_ASSERT(tbb.minX(), 92.568962);
+    FUZZY_ASSERT(tbb.maxX(), 261.989441);
+    FUZZY_ASSERT(tbb.minY(), 36.2565613);
+    FUZZY_ASSERT(tbb.maxY(), 222.517883);
+    FUZZY_ASSERT(tbb.width(), 60.5054359);
+    FUZZY_ASSERT(tbb.height(), 192.036713);
+    FUZZY_ASSERT(tbb.area(), 11619.2646);
+}
+
 int main()
 {
     binomial_tests();
     polynomial_tests();
     control_points_tests();
     values_tests();
+    readme_tests();
     return 0;
 }
 
