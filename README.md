@@ -1,8 +1,8 @@
-#Bezier
+# Bezier
 
 Bezier is a single header only C++11 library for Bezier curve calculations and manipulations. Currently only supports 2D bezier curves.
 
-##General Usage
+## General Usage
 
 The following examples demonstrate how to use the library. In this context, `t` is the parametrized factor defining the Bezier curve, ranging from 0 to 1. Even though the Bezier curve is defined to be between `t = 0` and `t = 1`, there is nothing wrong with using other values for `t`, the results will only be outside the normal range of the bezier curve.
 
@@ -12,8 +12,8 @@ Bezier::Bezier<3> cubicBezier({ {120, 160}, {35, 200}, {220, 260}, {220, 40} });
 
 // Get coordinates on the curve from a value between 0 and 1 (values outside this range are also valid because of the way bezier curves are defined).
 Bezier::Point p;
-p = cubicBezier.valueAt(0);     // (120, 60)
-p = cubicBezier.valueAt(0.5);   // (138.125, 197.5)
+p = cubicBezier.valueAt(0);   // (120, 60)
+p = cubicBezier.valueAt(0.5); // (138.125, 197.5)
 
 // Get coordinate values for a single axis. Currently only supports 2D.
 double value;
@@ -47,8 +47,8 @@ Bezier::Point xValCoord = cubicBezier.valueAt(xVal.t);       // Get the coordina
 Bezier::ExtremePoints xPoints = cubicBezier.extremePoints(); // Or get all the extreme points directly (includes 0 and 1)
 
 // Get bounding boxes of the Bezier curves.
-Bezier::AABB aabb = cubicBezier.aabb();             // Axis Aligned Bounding Box
-aabb = cubicBezier.aabb(xPoints);                   // Or get from extreme points (if you already have them) to reduce calculation time
-Bezier::TightBoundingBox tbb = cubicBezier.tbb();   // Tight bounding box
+Bezier::AABB aabb = cubicBezier.aabb();            // Axis Aligned Bounding Box
+aabb = cubicBezier.aabb(xPoints);                  // Or get from extreme points (if you already have them) to reduce calculation time
+Bezier::TightBoundingBox tbb = cubicBezier.tbb();  // Tight bounding box
 ```
 
