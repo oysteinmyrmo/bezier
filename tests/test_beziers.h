@@ -6,7 +6,7 @@ namespace TestBeziers
 {
     namespace Creators
     {
-        // Visualization: https://www.desmos.com/calculator/5i8ce3s7lq
+        // Visualization: https://www.desmos.com/calculator/fivneeogmh
         Bezier::Bezier<3> defaultCubicBezier()
         {
             std::vector<Bezier::Point> controlPoints(4);
