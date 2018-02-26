@@ -613,6 +613,7 @@ namespace Bezier
 
         Bezier(const std::vector<Point>& controlPoints)
         {
+            assert(controlPoints.size() == size()); // The Bezier curve must be initialized with the expected number og points
             for (size_t i = 0; i < controlPoints.size(); i++)
                 mControlPoints[i] = Point(controlPoints[i]);
         }
@@ -650,6 +651,7 @@ namespace Bezier
     public:
         double valueAt(float t, size_t axis) const
         {
+            assert(axis < Vec2::size); // Currently only support 2D
             double sum = 0;
             for (size_t n = 0; n < N+1; n++)
             {
