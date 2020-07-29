@@ -39,6 +39,8 @@ namespace Bezier
 {
     namespace Math
     {
+        constexpr float PI = 3.14159265358979f;
+
         inline double faculty(size_t n)
         {
             double d = 1.0;
@@ -235,7 +237,7 @@ namespace Bezier
 
         float angleDeg() const
         {
-            return angle() * 180.0 / M_PI;
+            return angle() * 180.0f / Math::PI;
         }
 
         float operator[](size_t axis) const

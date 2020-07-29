@@ -174,13 +174,13 @@ void tangents_tests()
     tangent = bezier3.tangentAt(xVals[0].t);
     FUZZY_ASSERT(tangent.x, 0.0);
     FUZZY_ASSERT(tangent.y, 1.0);
-    FUZZY_ASSERT(tangent.angle(), M_PI_2);
+    FUZZY_ASSERT(tangent.angle(), Bezier::Math::PI / 2.0f);
     FUZZY_ASSERT(tangent.angleDeg(), 90.0);
 
     tangent = bezier3.tangentAt(xVals[1].t);
     FUZZY_ASSERT(tangent.x, 0.0);
     FUZZY_ASSERT(tangent.y, -1.0);
-    FUZZY_ASSERT(tangent.angle(), -M_PI_2);
+    FUZZY_ASSERT(tangent.angle(), -Bezier::Math::PI / 2.0f);
     FUZZY_ASSERT(tangent.angleDeg(), -90.0);
 
     tangent = bezier3.tangentAt(xVals[2].t);
@@ -236,7 +236,7 @@ void normals_tests()
     normal = bezier3.normalAt(xVals[0].t);
     FUZZY_ASSERT(normal.x, -1.0);
     FUZZY_ASSERT(normal.y, 0.0);
-    FUZZY_ASSERT(normal.angle(), M_PI);
+    FUZZY_ASSERT(normal.angle(), Bezier::Math::PI);
     FUZZY_ASSERT(normal.angleDeg(), 180.0);
 
     normal = bezier3.normalAt(xVals[1].t);
@@ -248,7 +248,7 @@ void normals_tests()
     normal = bezier3.normalAt(xVals[2].t);
     FUZZY_ASSERT(normal.x, 0.0);
     FUZZY_ASSERT(normal.y, 1.0);
-    FUZZY_ASSERT(normal.angle(), M_PI_2);
+    FUZZY_ASSERT(normal.angle(), Bezier::Math::PI / 2.0f);
     FUZZY_ASSERT(normal.angleDeg(), 90.0);
 }
 
