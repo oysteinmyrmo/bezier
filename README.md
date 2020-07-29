@@ -16,9 +16,10 @@ p = cubicBezier.valueAt(0);   // (120, 60)
 p = cubicBezier.valueAt(0.5); // (138.125, 197.5)
 
 // Get coordinate values for a single axis. Currently only supports 2D.
-double value;
+float value;
 value = cubicBezier.valueAt(1, 0);    // 220 (x-coordinate at t = 1)
 value = cubicBezier.valueAt(0.75, 1); // 157.1875 (y-coordinate at t = 0.75)
+value = cubicBezier.length();         // 272.85 (Arc length of the bezier curve)
 
 // Translate and rotate Bezier curves.
 Bezier::Bezier<3> copy = cubicBezier;

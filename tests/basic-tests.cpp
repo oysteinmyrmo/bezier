@@ -245,6 +245,43 @@ void values_tests()
     FUZZY_ASSERT_POINT(val, 390, 15);
 }
 
+void length_tests()
+{
+	// Using similar curves as https://pomax.github.io/bezierinfo/#arclengthapprox for testing.
+	Bezier::Bezier<2> b2({ {  70, 250 }, { 20, 110 }, { 200,  80 } });            // Real length: 256.25
+	Bezier::Bezier<3> b3({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} }); // Real length: 272.87
+
+	FUZZY_ASSERT(b2.length(0),    0);
+	FUZZY_ASSERT(b2.length(1),    214.009338);
+	FUZZY_ASSERT(b2.length(2),    248.073410);
+	FUZZY_ASSERT(b2.length(3),    252.609528);
+	FUZZY_ASSERT(b2.length(5),    254.948517);
+	FUZZY_ASSERT(b2.length(10),   255.927200);
+	FUZZY_ASSERT(b2.length(15),   256.107788);
+	FUZZY_ASSERT(b2.length(20),   256.171021);
+	FUZZY_ASSERT(b2.length(50),   256.239044);
+	FUZZY_ASSERT(b2.length(100),  256.248718);
+	FUZZY_ASSERT(b2.length(),     256.248718); // Same as 100 (default number of intervals)
+	FUZZY_ASSERT(b2.length(200),  256.251160);
+	FUZZY_ASSERT(b2.length(500),  256.249878);
+	FUZZY_ASSERT(b2.length(1000), 256.248779);
+
+	FUZZY_ASSERT(b3.length(0),    0);
+	FUZZY_ASSERT(b3.length(1),    156.204987);
+	FUZZY_ASSERT(b3.length(2),    219.160416);
+	FUZZY_ASSERT(b3.length(3),    251.716125);
+	FUZZY_ASSERT(b3.length(5),    266.579285);
+	FUZZY_ASSERT(b3.length(10),   271.217773);
+	FUZZY_ASSERT(b3.length(15),   272.134460);
+	FUZZY_ASSERT(b3.length(20),   272.456390);
+	FUZZY_ASSERT(b3.length(50),   272.803558);
+	FUZZY_ASSERT(b3.length(100),  272.853027);
+	FUZZY_ASSERT(b3.length(),     272.853027); // Same as 100 (default number of intervals)
+	FUZZY_ASSERT(b3.length(200),  272.865356);
+	FUZZY_ASSERT(b3.length(500),  272.865540);
+	FUZZY_ASSERT(b3.length(1000), 272.863708);
+}
+
 // The test that exists in README.md, because it should be correct.
 void readme_tests()
 {
@@ -259,11 +296,13 @@ void readme_tests()
     FUZZY_ASSERT_POINT(p, 138.125, 197.5);
 
     // Get coordinate values for a single axis. Currently only supports 2D.
-    double value;
+    float value;
     value = cubicBezier.valueAt(1, 0);    // 220 (x-coordinate at t = 1)
     FUZZY_ASSERT(value, 220);
     value = cubicBezier.valueAt(0.75, 1); // 157.1875 (y-coordinate at t = 0.75)
     FUZZY_ASSERT(value, 157.1875);
+    value = cubicBezier.length();         // 272.85 (Arc length of the bezier curve)
+    FUZZY_ASSERT(value, 272.853);
 
     // Translate and rotate Bezier curves.
     Bezier::Bezier<3> copy = cubicBezier;
@@ -352,6 +391,7 @@ int main()
     polynomial_tests();
     control_points_tests();
     values_tests();
+    length_tests();
     readme_tests();
     return 0;
 }

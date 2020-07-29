@@ -733,6 +733,34 @@ namespace Bezier
             }
         }
 
+        // Note: This is a brute force length calculation. If more precision is needed,
+        // use something like https://pomax.github.io/bezierinfo/#arclength
+        float length(size_t intervals = 100) const
+        {
+            float length = 0.0f;
+
+            if (intervals > 0)
+            {
+                float t = 0.0f;
+                const float dt = 1.0f / (float)intervals;
+
+                Point p1 = valueAt(t);
+                Point p2;
+
+                for (size_t i = 0; i < intervals; i++)
+                {
+                    p2 = valueAt(t + dt);
+                    float x = p2.x - p1.x;
+                    float y = p2.y - p1.y;
+                    length += sqrt(x * x + y * y);
+                    p1.set(p2);
+                    t += dt;
+                }
+            }
+
+            return length;
+        }
+
         ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,
                                      float epsilon = BEZIER_FUZZY_EPSILON,
                                      size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const
