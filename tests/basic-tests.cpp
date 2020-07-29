@@ -221,7 +221,7 @@ void values_tests()
     val = bezier3.valueAt(0.75);
     FUZZY_ASSERT_POINT(val, 192.421875, 157.1875);
 
-    val = bezier3.valueAt(-0.35);
+    val = bezier3.valueAt(-0.35f);
     FUZZY_ASSERT_POINT(val, 327.983124, 138.212509);
 
     val = bezier3.valueAt(1.5);
@@ -271,7 +271,7 @@ void readme_tests()
     FUZZY_ASSERT(copy.valueAt(0, 0), 130);
     FUZZY_ASSERT(copy.valueAt(0, 1), 175);
     copy.rotate(0.5);            // Rotate 0.5 radians around the origin
-    copy.rotate(3.14, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
+    copy.rotate(3.14f, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
 
     // Get normals along the bezier curve.
     Bezier::Normal normal = cubicBezier.normalAt(0.75); // Get normalized normal at t = 0.75. Add false as second argument to disable normalization.
