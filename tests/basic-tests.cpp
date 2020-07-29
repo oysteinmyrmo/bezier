@@ -309,7 +309,7 @@ void readme_tests()
     copy.translate(10, 15);      // Translate 10 in x-direction, 15 in y-direction
     FUZZY_ASSERT(copy.valueAt(0, 0), 130);
     FUZZY_ASSERT(copy.valueAt(0, 1), 175);
-    copy.rotate(0.5);            // Rotate 0.5 radians around the origin
+    copy.rotate(0.5);             // Rotate 0.5 radians around the origin
     copy.rotate(3.14f, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
 
     // Get normals along the bezier curve.
