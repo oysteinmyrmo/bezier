@@ -23,6 +23,7 @@
 #include <cmath>
 #include <vector>
 #include <limits>
+#include <algorithm>
 
 // Cross platform define for printing size_t variables
 #ifdef __WIN32__
