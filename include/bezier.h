@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 #pragma once
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <vector>
 #include <limits>
