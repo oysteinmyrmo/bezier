@@ -24,6 +24,7 @@
 #include <vector>
 #include <limits>
 #include <algorithm>
+#include <array>
 
 // Cross platform define for printing size_t variables
 #ifdef __WIN32__
@@ -628,6 +629,19 @@ namespace Bezier
     class Bezier
     {
     public:
+        template <size_t N>
+        struct Split
+        {
+            Split(const Point *l, const Point *r)
+                : left(l, N+1)
+                , right(r, N+1)
+            {}
+
+            Bezier<N> left;
+            Bezier<N> right;
+        };
+
+    public:
         Bezier()
         {
             for (size_t i = 0; i < N+1; i++)
@@ -639,6 +653,13 @@ namespace Bezier
             assert(controlPoints.size() == size()); // The Bezier curve must be initialized with the expected number og points
             for (size_t i = 0; i < controlPoints.size(); i++)
                 mControlPoints[i] = Point(controlPoints[i]);
+        }
+
+        Bezier(const Point *points, size_t size)
+        {
+            assert(size == N+1);
+            for (size_t i = 0; i < size; i++)
+                mControlPoints[i] = points[i];
         }
 
         Bezier(const Bezier<N>& other)
@@ -759,6 +780,41 @@ namespace Bezier
             }
 
             return length;
+        }
+
+        Split<N> split(float t) const
+        {
+            Point l[N+1];
+            Point r[N+1];
+            l[0] = mControlPoints[0];
+            r[0] = mControlPoints[N];
+
+            std::array<Point, N+1> prev = mControlPoints;
+            std::array<Point, N+1> curr;
+
+            // de Casteljau: https://pomax.github.io/bezierinfo/#splitting
+            int subs = 0;
+            while (subs < N)
+            {
+                for (size_t i = 0; i < N - subs; i++)
+                {
+                    curr[i].x = (1.0f - t) * prev[i].x + t * prev[i + 1].x;
+                    curr[i].y = (1.0f - t) * prev[i].y + t * prev[i + 1].y;
+                    if (i == 0)
+                        l[subs+1].set(curr[i]);
+                    if (i == (N - subs - 1))
+                        r[subs+1].set(curr[i]);
+                }
+                std::swap(prev, curr);
+                subs++;
+            }
+
+            return Split<N>(l, r);
+        }
+
+        Split<N> split() const
+        {
+            return split(0.5f);
         }
 
         ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,
@@ -907,7 +963,7 @@ namespace Bezier
         static const PolynomialCoefficients<N> polynomialCoefficients;
 
     private:
-        Point mControlPoints[N+1];
+        std::array<Point, N+1> mControlPoints;
     };
 
     template<size_t N>

@@ -282,6 +282,26 @@ void length_tests()
 	FUZZY_ASSERT(b3.length(1000), 272.863708);
 }
 
+void split_tests()
+{
+    Bezier::Bezier<3> b3({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} });
+    auto split = b3.split();
+
+    FUZZY_ASSERT_POINT(split.left[0], 120, 160);
+    FUZZY_ASSERT_POINT(split.left[1], 77.5, 180);
+    FUZZY_ASSERT_POINT(split.left[2], 102.5, 205);
+    FUZZY_ASSERT_POINT(split.left[3], 138.125, 197.5);
+
+    FUZZY_ASSERT_POINT(split.right[0], 220, 40);
+    FUZZY_ASSERT_POINT(split.right[1], 220, 150);
+    FUZZY_ASSERT_POINT(split.right[2], 173.75, 190);
+    FUZZY_ASSERT_POINT(split.right[3], 138.125, 197.5);
+
+    BEZIER_ASSERT(b3.order() == 3);
+    BEZIER_ASSERT(split.left.order() == b3.order());
+    BEZIER_ASSERT(split.right.order() == b3.order());
+}
+
 // The test that exists in README.md, because it should be correct.
 void readme_tests()
 {
@@ -392,6 +412,7 @@ int main()
     control_points_tests();
     values_tests();
     length_tests();
+    split_tests();
     readme_tests();
     return 0;
 }
