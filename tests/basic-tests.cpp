@@ -247,39 +247,39 @@ void values_tests()
 
 void length_tests()
 {
-	// Using similar curves as https://pomax.github.io/bezierinfo/#arclengthapprox for testing.
-	Bezier::Bezier<2> b2({ {  70, 250 }, { 20, 110 }, { 200,  80 } });            // Real length: 256.25
-	Bezier::Bezier<3> b3({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} }); // Real length: 272.87
+    // Using similar curves as https://pomax.github.io/bezierinfo/#arclengthapprox for testing.
+    Bezier::Bezier<2> b2({ {  70, 250 }, { 20, 110 }, { 200,  80 } });            // Real length: 256.25
+    Bezier::Bezier<3> b3({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} }); // Real length: 272.87
 
-	FUZZY_ASSERT(b2.length(0),    0);
-	FUZZY_ASSERT(b2.length(1),    214.009338);
-	FUZZY_ASSERT(b2.length(2),    248.073410);
-	FUZZY_ASSERT(b2.length(3),    252.609528);
-	FUZZY_ASSERT(b2.length(5),    254.948517);
-	FUZZY_ASSERT(b2.length(10),   255.927200);
-	FUZZY_ASSERT(b2.length(15),   256.107788);
-	FUZZY_ASSERT(b2.length(20),   256.171021);
-	FUZZY_ASSERT(b2.length(50),   256.239044);
-	FUZZY_ASSERT(b2.length(100),  256.248718);
-	FUZZY_ASSERT(b2.length(),     256.248718); // Same as 100 (default number of intervals)
-	FUZZY_ASSERT(b2.length(200),  256.251160);
-	FUZZY_ASSERT(b2.length(500),  256.249878);
-	FUZZY_ASSERT(b2.length(1000), 256.248779);
+    FUZZY_ASSERT(b2.length(0),    0);
+    FUZZY_ASSERT(b2.length(1),    214.009338);
+    FUZZY_ASSERT(b2.length(2),    248.073410);
+    FUZZY_ASSERT(b2.length(3),    252.609528);
+    FUZZY_ASSERT(b2.length(5),    254.948517);
+    FUZZY_ASSERT(b2.length(10),   255.927200);
+    FUZZY_ASSERT(b2.length(15),   256.107788);
+    FUZZY_ASSERT(b2.length(20),   256.171021);
+    FUZZY_ASSERT(b2.length(50),   256.239044);
+    FUZZY_ASSERT(b2.length(100),  256.248718);
+    FUZZY_ASSERT(b2.length(),     256.248718); // Same as 100 (default number of intervals)
+    FUZZY_ASSERT(b2.length(200),  256.251160);
+    FUZZY_ASSERT(b2.length(500),  256.249878);
+    FUZZY_ASSERT(b2.length(1000), 256.248779);
 
-	FUZZY_ASSERT(b3.length(0),    0);
-	FUZZY_ASSERT(b3.length(1),    156.204987);
-	FUZZY_ASSERT(b3.length(2),    219.160416);
-	FUZZY_ASSERT(b3.length(3),    251.716125);
-	FUZZY_ASSERT(b3.length(5),    266.579285);
-	FUZZY_ASSERT(b3.length(10),   271.217773);
-	FUZZY_ASSERT(b3.length(15),   272.134460);
-	FUZZY_ASSERT(b3.length(20),   272.456390);
-	FUZZY_ASSERT(b3.length(50),   272.803558);
-	FUZZY_ASSERT(b3.length(100),  272.853027);
-	FUZZY_ASSERT(b3.length(),     272.853027); // Same as 100 (default number of intervals)
-	FUZZY_ASSERT(b3.length(200),  272.865356);
-	FUZZY_ASSERT(b3.length(500),  272.865540);
-	FUZZY_ASSERT(b3.length(1000), 272.863708);
+    FUZZY_ASSERT(b3.length(0),    0);
+    FUZZY_ASSERT(b3.length(1),    156.204987);
+    FUZZY_ASSERT(b3.length(2),    219.160416);
+    FUZZY_ASSERT(b3.length(3),    251.716125);
+    FUZZY_ASSERT(b3.length(5),    266.579285);
+    FUZZY_ASSERT(b3.length(10),   271.217773);
+    FUZZY_ASSERT(b3.length(15),   272.134460);
+    FUZZY_ASSERT(b3.length(20),   272.456390);
+    FUZZY_ASSERT(b3.length(50),   272.803558);
+    FUZZY_ASSERT(b3.length(100),  272.853027);
+    FUZZY_ASSERT(b3.length(),     272.853027); // Same as 100 (default number of intervals)
+    FUZZY_ASSERT(b3.length(200),  272.865356);
+    FUZZY_ASSERT(b3.length(500),  272.865540);
+    FUZZY_ASSERT(b3.length(1000), 272.863708);
 }
 
 void split_tests()
