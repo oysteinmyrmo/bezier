@@ -426,6 +426,22 @@ void readme_tests()
     FUZZY_ASSERT(tbb.width(), 60.5054359);
     FUZZY_ASSERT(tbb.height(), 192.036713);
     FUZZY_ASSERT(tbb.area(), 11619.2646);
+
+    // Split the Bezier curve at desired points. The left and right parts are new bezier curves
+    // of the same order as the original curve.
+    auto split = cubicBezier.split(0.5f);
+    FUZZY_ASSERT_POINT(split.left[0], 120, 160);
+    FUZZY_ASSERT_POINT(split.left[1], 77.5, 180);
+    FUZZY_ASSERT_POINT(split.left[2], 102.5, 205);
+    FUZZY_ASSERT_POINT(split.left[3], 138.125, 197.5);
+    FUZZY_ASSERT_POINT(split.right[0], 220, 40);
+    FUZZY_ASSERT_POINT(split.right[1], 220, 150);
+    FUZZY_ASSERT_POINT(split.right[2], 173.75, 190.0);
+    FUZZY_ASSERT_POINT(split.right[3], 138.125, 197.5);
+    BEZIER_ASSERT(split.left.order() == cubicBezier.order());
+    BEZIER_ASSERT(split.right.order() == cubicBezier.order());
+    auto left  = split.left;  // Left part of the split
+    auto right = split.right; // Right part of the split
 }
 
 int main()

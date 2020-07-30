@@ -51,5 +51,11 @@ Bezier::ExtremePoints xPoints = cubicBezier.extremePoints(); // Or get all the e
 Bezier::AABB aabb = cubicBezier.aabb();            // Axis Aligned Bounding Box
 aabb = cubicBezier.aabb(xPoints);                  // Or get from extreme points (if you already have them) to reduce calculation time
 Bezier::TightBoundingBox tbb = cubicBezier.tbb();  // Tight bounding box
+
+// Split the Bezier curve at desired points. The left and right parts are new bezier curves
+// of the same order as the original curve.
+auto split = cubicBezier.split(0.5f);
+auto left  = split.left;  // Left part of the split
+auto right = split.right; // Right part of the split
 ```
 
