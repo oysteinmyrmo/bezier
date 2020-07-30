@@ -282,24 +282,47 @@ void length_tests()
     FUZZY_ASSERT(b3.length(1000), 272.863708);
 }
 
+// TODO: Test splitting on more curves.
 void split_tests()
 {
     Bezier::Bezier<3> b3({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} });
-    auto split = b3.split();
-
-    FUZZY_ASSERT_POINT(split.left[0], 120, 160);
-    FUZZY_ASSERT_POINT(split.left[1], 77.5, 180);
-    FUZZY_ASSERT_POINT(split.left[2], 102.5, 205);
-    FUZZY_ASSERT_POINT(split.left[3], 138.125, 197.5);
-
-    FUZZY_ASSERT_POINT(split.right[0], 220, 40);
-    FUZZY_ASSERT_POINT(split.right[1], 220, 150);
-    FUZZY_ASSERT_POINT(split.right[2], 173.75, 190);
-    FUZZY_ASSERT_POINT(split.right[3], 138.125, 197.5);
-
     BEZIER_ASSERT(b3.order() == 3);
-    BEZIER_ASSERT(split.left.order() == b3.order());
-    BEZIER_ASSERT(split.right.order() == b3.order());
+
+    auto split_05 = b3.split();
+    FUZZY_ASSERT_POINT(split_05.left[0], 120, 160);
+    FUZZY_ASSERT_POINT(split_05.left[1], 77.5, 180);
+    FUZZY_ASSERT_POINT(split_05.left[2], 102.5, 205);
+    FUZZY_ASSERT_POINT(split_05.left[3], 138.125, 197.5);
+    FUZZY_ASSERT_POINT(split_05.right[0], 220, 40);
+    FUZZY_ASSERT_POINT(split_05.right[1], 220, 150);
+    FUZZY_ASSERT_POINT(split_05.right[2], 173.75, 190);
+    FUZZY_ASSERT_POINT(split_05.right[3], 138.125, 197.5);
+    BEZIER_ASSERT(split_05.left.order() == b3.order());
+    BEZIER_ASSERT(split_05.right.order() == b3.order());
+
+    auto split_08 = b3.split(0.8f);
+    FUZZY_ASSERT_POINT(split_08.left[0], 120, 160);
+    FUZZY_ASSERT_POINT(split_08.left[1], 52, 192);
+    FUZZY_ASSERT_POINT(split_08.left[2], 156.8, 236.8);
+    FUZZY_ASSERT_POINT(split_08.left[3], 201.44, 140.8);
+    FUZZY_ASSERT_POINT(split_08.right[0], 220, 40);
+    FUZZY_ASSERT_POINT(split_08.right[1], 220, 84);
+    FUZZY_ASSERT_POINT(split_08.right[2], 212.6, 116.8);
+    FUZZY_ASSERT_POINT(split_08.right[3], 201.44, 140.8);
+    BEZIER_ASSERT(split_08.left.order() == b3.order());
+    BEZIER_ASSERT(split_08.right.order() == b3.order());
+
+    auto split_033 = b3.split(0.33f);
+    FUZZY_ASSERT_POINT(split_033.left[0], 120, 160);
+    FUZZY_ASSERT_POINT(split_033.left[1], 91.950, 173.2);
+    FUZZY_ASSERT_POINT(split_033.left[2], 93.303, 188.578);
+    FUZZY_ASSERT_POINT(split_033.left[3], 107.7077, 195.3529);
+    FUZZY_ASSERT_POINT(split_033.right[0], 220, 40);
+    FUZZY_ASSERT_POINT(split_033.right[1], 220, 187.4);
+    FUZZY_ASSERT_POINT(split_033.right[2], 136.9535, 209.108);
+    FUZZY_ASSERT_POINT(split_033.right[3], 107.7077, 195.3529);
+    BEZIER_ASSERT(split_033.left.order() == b3.order());
+    BEZIER_ASSERT(split_033.right.order() == b3.order());
 }
 
 // The test that exists in README.md, because it should be correct.
