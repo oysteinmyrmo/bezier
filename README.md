@@ -57,5 +57,9 @@ Bezier::TightBoundingBox tbb = cubicBezier.tbb();  // Tight bounding box
 auto split = cubicBezier.split(0.5f);
 auto left  = split.left;  // Left part of the split
 auto right = split.right; // Right part of the split
+
+// Find the mid point on the curve by arch length.
+float tAtMidPoint = cubicBezier.archMidPoint();            // 0.70718
+Bezier::Point midPoint = cubicBezier.valueAt(tAtMidPoint); // (183.8, 168.8)
 ```
 

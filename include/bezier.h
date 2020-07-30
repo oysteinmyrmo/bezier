@@ -817,6 +817,32 @@ namespace Bezier
             return split(0.5f);
         }
 
+        float archMidPoint(const float epsilon = 0.001f, const size_t maxDepth = 100) const
+        {
+            float t = 0.5f;
+            float s = 0.5f; // Binary search split value
+
+            size_t iter = 0;
+            while (iter < maxDepth)
+            {
+                auto split = this->split(t);
+                float low  = split.left.length();
+                float high = split.right.length();
+                float diff = low - high;
+
+                if (std::abs(diff) <= epsilon)
+                {
+                    break;
+                }
+
+                s *= 0.5f;
+                t += (diff > 0 ? -1 : 1) * s;
+                iter++;
+            }
+
+            return t;
+        }
+
         ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,
                                      float epsilon = BEZIER_FUZZY_EPSILON,
                                      size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const

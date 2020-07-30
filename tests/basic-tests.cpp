@@ -325,6 +325,69 @@ void split_tests()
     BEZIER_ASSERT(split_033.right.order() == b3.order());
 }
 
+void arch_point_tests()
+{
+    float t;
+    Bezier::Point point;
+
+    Bezier::Bezier<2> a({ {80, 20}, {50, 10}, {95, 95} });
+    t = a.archMidPoint();
+    point = a.valueAt(t);
+    FUZZY_ASSERT(t, 0.71246);
+    FUZZY_ASSERT_POINT(point, 75.32214, 53.97224);
+
+    Bezier::Bezier<2> b({ {70, 250}, {20, 110}, {250, 63} });
+    t = b.archMidPoint();
+    point = b.valueAt(t);
+    FUZZY_ASSERT(t, 0.59447);
+    FUZZY_ASSERT_POINT(point, 109.50371, 116.41393);
+
+    Bezier::Bezier<3> c({ {210, 160}, {35, 200}, {220, 260}, {220, 60} });
+    t = c.archMidPoint();
+    point = c.valueAt(t);
+    FUZZY_ASSERT(t, 0.66141);
+    FUZZY_ASSERT_POINT(point, 177.52785, 184.60152);
+
+    Bezier::Bezier<3> d({ {170, 90}, {100, 200}, {40, 40}, {230, 135} });
+    t = d.archMidPoint();
+    point = d.valueAt(t);
+    FUZZY_ASSERT(t, 0.702915192);
+    FUZZY_ASSERT_POINT(point, 120.56327, 104.08348);
+
+    // ---
+
+    Bezier::Bezier<3> cubicBezier({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} });
+
+    t = cubicBezier.archMidPoint();
+    point = cubicBezier.valueAt(t);
+    FUZZY_ASSERT(t, 0.70718);
+    FUZZY_ASSERT_POINT(point, 183.83701, 168.76790);
+
+    // High epsilon, high max search depth.
+    t = cubicBezier.archMidPoint(1e-8f, 1000);
+    point = cubicBezier.valueAt(t);
+    FUZZY_ASSERT(t, 0.70718);
+    FUZZY_ASSERT_POINT(point, 183.83712, 168.76769);
+
+    // High epsilon, low max search depth. Will not be precise.
+    t = cubicBezier.archMidPoint(1e-8f, 10);
+    point = cubicBezier.valueAt(t);
+    FUZZY_ASSERT(t, 0.70752);
+    FUZZY_ASSERT_POINT(point, 183.90683, 168.68553);
+
+    // Low epsilon, high max search depth. Will not be precise.
+    t = cubicBezier.archMidPoint(0.1f, 1000);
+    point = cubicBezier.valueAt(t);
+    FUZZY_ASSERT(t, 0.70703);
+    FUZZY_ASSERT_POINT(point, 183.80527, 168.80531);
+
+    // Low epsilon, low max search depth. Will not be precise.
+    t = cubicBezier.archMidPoint(0.1f, 10);
+    point = cubicBezier.valueAt(t);
+    FUZZY_ASSERT(t, 0.70703);
+    FUZZY_ASSERT_POINT(point, 183.80527, 168.80531);
+}
+
 // The test that exists in README.md, because it should be correct.
 void readme_tests()
 {
@@ -442,6 +505,12 @@ void readme_tests()
     BEZIER_ASSERT(split.right.order() == cubicBezier.order());
     auto left  = split.left;  // Left part of the split
     auto right = split.right; // Right part of the split
+
+    // Find the mid point on the curve by arch length.
+    float tAtMidPoint = cubicBezier.archMidPoint();
+    Bezier::Point midPoint = cubicBezier.valueAt(tAtMidPoint);
+    FUZZY_ASSERT(tAtMidPoint, 0.70718);
+    FUZZY_ASSERT_POINT(midPoint, 183.83701, 168.76790);
 }
 
 int main()
@@ -452,6 +521,7 @@ int main()
     values_tests();
     length_tests();
     split_tests();
+    arch_point_tests();
     readme_tests();
     return 0;
 }
