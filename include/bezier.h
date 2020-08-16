@@ -26,13 +26,6 @@
 #include <algorithm>
 #include <array>
 
-// Cross platform define for printing size_t variables
-#ifdef __WIN32__
-#define BEZIER_SIZE_T_FORMAT "%ld"
-#else
-#define BEZIER_SIZE_T_FORMAT "%zd"
-#endif
-
 #define BEZIER_FUZZY_EPSILON 0.0001
 #define BEZIER_DEFAULT_INTERVALS 10
 #define BEZIER_DEFAULT_MAX_ITERATIONS 15
@@ -252,7 +245,6 @@ namespace Bezier
                 case 1:
                     return y;
                 default:
-                    fprintf(stderr, "Erroneous axis: " BEZIER_SIZE_T_FORMAT ". Returning 0.\n", axis);
                     return 0;
             }
         }
@@ -267,7 +259,6 @@ namespace Bezier
                 case 1:
                     return y;
                 default:
-                    fprintf(stderr, "Erroneous axis: " BEZIER_SIZE_T_FORMAT ". Returning x.\n", axis);
                     return x;
             }
         }
