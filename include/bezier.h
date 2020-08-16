@@ -620,16 +620,16 @@ namespace Bezier
     class Bezier
     {
     public:
-        template <size_t N>
+        template <size_t M>
         struct Split
         {
             Split(const Point *l, const Point *r)
-                : left(l, N+1)
-                , right(r, N+1)
+                : left(l, M+1)
+                , right(r, M+1)
             {}
 
-            Bezier<N> left;
-            Bezier<N> right;
+            Bezier<M> left;
+            Bezier<M> right;
         };
 
     public:
