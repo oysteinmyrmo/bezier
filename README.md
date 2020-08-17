@@ -1,5 +1,7 @@
 # Bezier
 
+[![Build Status](https://travis-ci.com/oysteinmyrmo/bezier.svg?branch=master)](https://travis-ci.com/oysteinmyrmo/bezier)
+
 Bezier is a single header only C++11 library for Bezier curve calculations and manipulations. Currently only supports 2D bezier curves.
 
 ## General Usage
