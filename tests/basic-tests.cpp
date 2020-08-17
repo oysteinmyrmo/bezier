@@ -22,6 +22,7 @@
 #include "bezier.h"
 #include "assert.h"
 #include "test_beziers.h"
+#include <cstdio>
 
 void binomial_tests()
 {
@@ -497,14 +498,18 @@ void readme_tests()
 
 int main()
 {
-    binomial_tests();
-    polynomial_tests();
-    control_points_tests();
-    values_tests();
-    length_tests();
-    split_tests();
-    arch_point_tests();
-    readme_tests();
+    printf("Starting tests.\n");
+
+    printf("Running binomial_tests().\n");         binomial_tests();
+    printf("Running polynomial_tests().\n");       polynomial_tests();
+    printf("Running control_points_tests().\n");   control_points_tests();
+    printf("Running values_tests().\n");           values_tests();
+    printf("Running length_tests().\n");           length_tests();
+    printf("Running split_tests().\n");            split_tests();
+    printf("Running arch_point_tests().\n");       arch_point_tests();
+    printf("Running readme_tests().\n");           readme_tests();
+
+    printf("All tests completed.\n");
     return 0;
 }
 

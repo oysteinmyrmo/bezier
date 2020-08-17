@@ -254,10 +254,13 @@ void normals_tests()
 
 int main()
 {
-    derivatives_tests();
-    extreme_values_tests();
-    tangents_tests();
-    normals_tests();
+    printf("Starting tests.\n");
 
+    printf("Running derivative_tests().\n");        derivatives_tests();
+    printf("Running extreme_values_tests().\n");    extreme_values_tests();
+    printf("Running tangents_tests().\n");          tangents_tests();
+    printf("Running normals_tests().\n");           normals_tests();
+
+    printf("All tests completed.\n");
     return 0;
 }
