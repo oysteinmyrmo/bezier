@@ -11,9 +11,9 @@ cd build
 if [[ "$OS" == "Windows_NT" ]]; then
     cmake ..
     cmake --build . --config Release
-    ctest -C Release .
+    ctest -C Release --verbose .
 else
     cmake -DCMAKE_BUILD_TYPE=Release ..
     cmake --build .
-    ctest .
+    ctest --verbose .
 fi
