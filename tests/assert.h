@@ -19,7 +19,7 @@ void BEZIER_ASSERT(bool x)
 template<size_t N>
 void BEZIER_ASSERT_BINOMIAL_COEFFICIENT(int pos, int val)
 {
-    return BEZIER_ASSERT(Bezier::Bezier<N>::binomialCoefficients[pos] == val);
+    BEZIER_ASSERT(Bezier::Bezier<N>::binomialCoefficients[pos] == val);
 }
 
 template<size_t N>
