@@ -13,7 +13,11 @@ void BEZIER_ASSERT(bool x)
     static int exitCode = 1;
     exitCode++;
     if (!x)
+    {
+        assert(false);
+        printf("BEZIER_ASSERT failed! Exit code = %d\n.", exitCode);
         exit(exitCode);
+    }
 }
 
 template<size_t N>
