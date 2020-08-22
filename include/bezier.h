@@ -89,7 +89,7 @@ namespace Bezier
         }
 
     private:
-        size_t mCoefficients[size()];
+        size_t mCoefficients[size()]{0};
     };
 
     struct PolynomialPair
