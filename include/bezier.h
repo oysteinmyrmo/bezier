@@ -36,22 +36,16 @@ namespace Bezier
     {
         constexpr float PI = 3.14159265358979f;
 
-        inline size_t faculty(size_t n)
-        {
-            size_t d = 1;
-            if (n == 0 || n == 1)
-                return d;
-            for (size_t i = 2; i <= n; i++)
-                d *= i;
-            return d;
-        }
-
-        // Note: Using faculty function seems to be way faster than the recursive one
-        // given at https://en.wikipedia.org/wiki/Binomial_coefficient
         inline size_t binomial(size_t n, size_t k)
         {
             assert(k <= n);
-            return faculty(n) / (faculty(k) * faculty(n - k));
+            size_t val = 1;
+            for (size_t i = 1; i <= k; i++)
+            {
+                val *= n + 1 - i;
+                val /= i;
+            }
+            return val;
         }
 
         inline bool isWithinZeroAndOne(float x)
