@@ -14,7 +14,7 @@ Bezier::Bezier<3> cubicBezier({ {120, 160}, {35, 200}, {220, 260}, {220, 40} });
 
 // Get coordinates on the curve from a value between 0 and 1 (values outside this range are also valid because of the way bezier curves are defined).
 Bezier::Point p;
-p = cubicBezier.valueAt(0);   // (120, 60)
+p = cubicBezier.valueAt(0);   // (120, 160)
 p = cubicBezier.valueAt(0.5); // (138.125, 197.5)
 
 // Get coordinate values for a single axis. Currently only supports 2D.
