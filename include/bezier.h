@@ -159,11 +159,6 @@ namespace Bezier
                 this->normalize();
         }
 
-        Vec2(const Vec2& other)
-            : x(other.x)
-            , y(other.y)
-        {}
-
         Vec2(const Vec2& other, bool normalize)
             : Vec2(other.x, other.y, normalize)
         {}
