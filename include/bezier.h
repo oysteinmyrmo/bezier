@@ -82,7 +82,7 @@ namespace Bezier
             return N + 1;
         }
 
-        const size_t operator [](size_t idx) const
+        size_t operator [](size_t idx) const
         {
             assert(idx < size());
             return mCoefficients[idx];
