@@ -1,9 +1,23 @@
-include_directories(${BEZIER_INCLUDE_DIR})
-set(BEZIER "${BEZIER_INCLUDE_DIR}/bezier.h")
+include(FetchContent)
 
-add_executable(basic-tests basic-tests.cpp assert.h test_beziers.h ${BEZIER})
-add_executable(derivative-tests derivative-tests.cpp assert.h test_beziers.h ${BEZIER})
+FetchContent_Declare(
+    catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v3.4.0
+)
 
-add_test(NAME basic-tests COMMAND basic-tests)
-add_test(NAME derivative-tests COMMAND derivative-tests)
+FetchContent_MakeAvailable(catch2)
 
+add_executable(bezier-tests
+    bezier-test-tools.cpp
+    bezier-test-tools.h
+    test_beziers.cpp
+    test_beziers.h
+    basic-tests.cpp
+    derivative-tests.cpp
+)
+
+target_link_libraries(bezier-tests PRIVATE Catch2::Catch2WithMain)
+target_include_directories(bezier-tests PRIVATE ${BEZIER_INCLUDE_DIR})
+
+add_test(NAME bezier-tests COMMAND bezier-tests)

@@ -63,7 +63,7 @@ jobs:
             --install-prefix "$(pwd)/install"
       - name: Build
         shell: bash
-        run: cmake --build build --config ${{ matrix.config.build_type }} --target basic-tests derivative-tests
+        run: cmake --build build --config ${{ matrix.config.build_type }} --target bezier-tests
       - name: Test
         shell: bash
         run: ctest -C ${{ matrix.config.build_type }} --verbose --output-on-failure --test-dir build
