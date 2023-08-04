@@ -20,4 +20,4 @@ add_executable(bezier-tests
 target_link_libraries(bezier-tests PRIVATE Catch2::Catch2WithMain)
 target_include_directories(bezier-tests PRIVATE ${BEZIER_INCLUDE_DIR})
 
-add_test(NAME bezier-tests COMMAND bezier-tests)
+add_test(NAME bezier-tests COMMAND bezier-tests --durations yes)
