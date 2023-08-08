@@ -24,26 +24,26 @@
 
 TEST_CASE("Test derivatives", "[derivatives]")
 {
-    Bezier::Bezier<3> bezier3 = Bezier::Test::defaultCubicBezier();
-    Bezier::Bezier<2> bezier2 = bezier3.derivative();
-    Bezier::Bezier<1> bezier1 = bezier2.derivative();
-    Bezier::Bezier<0> bezier0 = bezier1.derivative();
+    bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
+    bezier::Bezier<2> bezier2 = bezier3.derivative();
+    bezier::Bezier<1> bezier1 = bezier2.derivative();
+    bezier::Bezier<0> bezier0 = bezier1.derivative();
 
     CHECK(bezier3.size() == 4);
     CHECK(bezier2.size() == 3);
     CHECK(bezier1.size() == 2);
     CHECK(bezier0.size() == 1);
 
-    Bezier::Test::fuzzyCheckPoint(bezier2[0], -255.0, 120.0);
-    Bezier::Test::fuzzyCheckPoint(bezier2[1], 555.0, 180.0);
-    Bezier::Test::fuzzyCheckPoint(bezier2[2], 0.0, -660.0);
+    bezier::test::fuzzyCheckPoint(bezier2[0], -255.0, 120.0);
+    bezier::test::fuzzyCheckPoint(bezier2[1], 555.0, 180.0);
+    bezier::test::fuzzyCheckPoint(bezier2[2], 0.0, -660.0);
 
-    Bezier::Test::fuzzyCheckPoint(bezier1[0], 1620.0, 120.0);
-    Bezier::Test::fuzzyCheckPoint(bezier1[1], -1110.0, -1680.0);
+    bezier::test::fuzzyCheckPoint(bezier1[0], 1620.0, 120.0);
+    bezier::test::fuzzyCheckPoint(bezier1[1], -1110.0, -1680.0);
 
-    Bezier::Test::fuzzyCheckPoint(bezier0[0], -2730.0, -1800.0);
+    bezier::test::fuzzyCheckPoint(bezier0[0], -2730.0, -1800.0);
 
-    bezier2 = Bezier::Test::defaultQuadraticBezier();
+    bezier2 = bezier::test::defaultQuadraticBezier();
     bezier1 = bezier2.derivative();
     bezier0 = bezier1.derivative();
 
@@ -51,32 +51,32 @@ TEST_CASE("Test derivatives", "[derivatives]")
     CHECK(bezier1.size() == 2);
     CHECK(bezier0.size() == 1);
 
-    Bezier::Test::fuzzyCheckPoint(bezier1[0], -100.0, -90.0);
-    Bezier::Test::fuzzyCheckPoint(bezier1[1], 160.0, -70.0);
+    bezier::test::fuzzyCheckPoint(bezier1[0], -100.0, -90.0);
+    bezier::test::fuzzyCheckPoint(bezier1[1], 160.0, -70.0);
 
-    Bezier::Test::fuzzyCheckPoint(bezier0[0], 260.0, 20.0);
+    bezier::test::fuzzyCheckPoint(bezier0[0], 260.0, 20.0);
 }
 
 TEST_CASE("Test extreme values", "[extreme_values]")
 {
     static constexpr float epsilon = 1.0e-4f;
 
-    Bezier::Bezier<3> bezier3 = Bezier::Test::defaultCubicBezier();
+    bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
 
-    Bezier::ExtremeValues xVals = bezier3.derivativeZero();
+    bezier::ExtremeValues xVals = bezier3.derivativeZero();
     CHECK(xVals.size() == 3);
     CHECK_THAT(xVals[0].t, Catch::Matchers::WithinAbs(0.186811984, epsilon));
     CHECK_THAT(xVals[1].t, Catch::Matchers::WithinAbs(1.0, epsilon));
     CHECK_THAT(xVals[2].t, Catch::Matchers::WithinAbs(0.437850952, epsilon));
 
-    Bezier::ExtremePoints xPoints = bezier3.extremePoints();
+    bezier::ExtremePoints xPoints = bezier3.extremePoints();
     CHECK(xPoints.size() == 4);
-    Bezier::Test::fuzzyCheckPoint(xPoints[0], 97.6645355, 182.555649);
-    Bezier::Test::fuzzyCheckPoint(xPoints[1], 220.0, 40.0);
-    Bezier::Test::fuzzyCheckPoint(xPoints[2], 125.442337, 198.86235);
-    Bezier::Test::fuzzyCheckPoint(xPoints[3], 120.0, 160.0);
+    bezier::test::fuzzyCheckPoint(xPoints[0], 97.6645355, 182.555649);
+    bezier::test::fuzzyCheckPoint(xPoints[1], 220.0, 40.0);
+    bezier::test::fuzzyCheckPoint(xPoints[2], 125.442337, 198.86235);
+    bezier::test::fuzzyCheckPoint(xPoints[3], 120.0, 160.0);
 
-    Bezier::AABB aabb = bezier3.aabb();
+    bezier::AABB aabb = bezier3.aabb();
     CHECK(aabb.size() == 4);
     CHECK_THAT(aabb.minX(), Catch::Matchers::WithinAbs(97.6645355, epsilon));
     CHECK_THAT(aabb.maxX(), Catch::Matchers::WithinAbs(220.0, epsilon));
@@ -86,7 +86,7 @@ TEST_CASE("Test extreme values", "[extreme_values]")
     CHECK_THAT(aabb.height(), Catch::Matchers::WithinAbs(158.86235, epsilon));
     CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.5, epsilon));
 
-    Bezier::TBB tbb = bezier3.tbb();
+    bezier::TBB tbb = bezier3.tbb();
     CHECK(tbb.size() == 4);
     CHECK_THAT(tbb.minX(), Catch::Matchers::WithinAbs(92.568962, epsilon));
     CHECK_THAT(tbb.maxX(), Catch::Matchers::WithinAbs(261.989441, epsilon));
@@ -96,7 +96,7 @@ TEST_CASE("Test extreme values", "[extreme_values]")
     CHECK_THAT(tbb.height(), Catch::Matchers::WithinAbs(192.036713, epsilon));
     CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(11619.2646, epsilon));
 
-    Bezier::Bezier<2> bezier2 = Bezier::Test::defaultQuadraticBezier();
+    bezier::Bezier<2> bezier2 = bezier::test::defaultQuadraticBezier();
 
     xVals = bezier2.derivativeZero();
     CHECK(xVals.size() == 1);
@@ -104,9 +104,9 @@ TEST_CASE("Test extreme values", "[extreme_values]")
 
     xPoints = bezier2.extremePoints();
     CHECK(xPoints.size() == 3);
-    Bezier::Test::fuzzyCheckPoint(xPoints[0], 50.7692261, 121.863899);
-    Bezier::Test::fuzzyCheckPoint(xPoints[1], 70.0, 155.0);
-    Bezier::Test::fuzzyCheckPoint(xPoints[2], 100.0, 75.0);
+    bezier::test::fuzzyCheckPoint(xPoints[0], 50.7692261, 121.863899);
+    bezier::test::fuzzyCheckPoint(xPoints[1], 70.0, 155.0);
+    bezier::test::fuzzyCheckPoint(xPoints[2], 100.0, 75.0);
 
     aabb = bezier2.aabb(xPoints);
     CHECK(aabb.size() == 4);
@@ -133,9 +133,9 @@ TEST_CASE("Test tangents", "[curves][tangents]")
 {
     static constexpr float epsilon = 1.0e-1f;
 
-    Bezier::Bezier<3> bezier3 = Bezier::Test::defaultCubicBezier();
-    Bezier::ExtremeValues xVals = bezier3.derivativeZero();
-    Bezier::Tangent tangent;
+    bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
+    bezier::ExtremeValues xVals = bezier3.derivativeZero();
+    bezier::Tangent tangent;
     CHECK(xVals.size() == 3);
 
     tangent = bezier3.tangentAt(0.0f);
@@ -177,13 +177,13 @@ TEST_CASE("Test tangents", "[curves][tangents]")
     tangent = bezier3.tangentAt(xVals[0].t);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.0, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(1.0, epsilon));
-    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(Bezier::Math::PI / 2.0, epsilon));
+    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(bezier::math::PI / 2.0, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(90.0, epsilon));
 
     tangent = bezier3.tangentAt(xVals[1].t);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.0, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(-1.0, epsilon));
-    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-Bezier::Math::PI / 2.0, epsilon));
+    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-bezier::math::PI / 2.0, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(-90.0, epsilon));
 
     tangent = bezier3.tangentAt(xVals[2].t);
@@ -197,9 +197,9 @@ TEST_CASE("Test normals", "[curves][normals]")
 {
     static constexpr double epsilon = 1.0e-4;
 
-    Bezier::Bezier<3> bezier3 = Bezier::Test::defaultCubicBezier();
-    Bezier::ExtremeValues xVals = bezier3.derivativeZero();
-    Bezier::Normal normal;
+    bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
+    bezier::ExtremeValues xVals = bezier3.derivativeZero();
+    bezier::Normal normal;
     CHECK(xVals.size() == 3);
 
     normal = bezier3.normalAt(0.0);
@@ -241,7 +241,7 @@ TEST_CASE("Test normals", "[curves][normals]")
     normal = bezier3.normalAt(xVals[0].t);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-1.0, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.0, epsilon));
-    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(-Bezier::Math::PI, epsilon));
+    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(-bezier::math::PI, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(-180.0, epsilon));
 
     normal = bezier3.normalAt(xVals[1].t);
@@ -253,6 +253,6 @@ TEST_CASE("Test normals", "[curves][normals]")
     normal = bezier3.normalAt(xVals[2].t);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.0, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(1.0, epsilon));
-    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(Bezier::Math::PI / 2.0, epsilon));
+    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(bezier::math::PI / 2.0, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(90.0, epsilon));
 }

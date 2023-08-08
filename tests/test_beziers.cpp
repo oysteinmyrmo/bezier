@@ -1,9 +1,9 @@
 #include "test_beziers.h"
 
 // Visualization: https://www.desmos.com/calculator/fivneeogmh
-Bezier::Bezier<3> Bezier::Test::defaultCubicBezier()
+bezier::Bezier<3> bezier::test::defaultCubicBezier()
 {
-    return ::Bezier::Bezier<3>({
+    return ::bezier::Bezier<3>({
         {120, 160},
         {35,  200},
         {220, 260},
@@ -11,9 +11,9 @@ Bezier::Bezier<3> Bezier::Test::defaultCubicBezier()
     });
 }
 
-Bezier::Bezier<2> Bezier::Test::defaultQuadraticBezier()
+bezier::Bezier<2> bezier::test::defaultQuadraticBezier()
 {
-    return ::Bezier::Bezier<2>({
+    return ::bezier::Bezier<2>({
         {70, 155},
         {20, 110},
         {100, 75}
