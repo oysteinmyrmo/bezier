@@ -2,6 +2,31 @@
 
 Bezier is a single header only C++11 library for Bezier curve calculations and manipulations. Currently only supports 2D bezier curves.
 
+## Include Bezier in Your Project
+
+If it is desirable to use the single header file directly, simply download and include it, for example `curl -O https://raw.githubusercontent.com/oysteinmyrmo/bezier/master/include/bezier.h`.
+
+It is also easy using CMake's `FetchContent` functionality:
+
+```c++
+include(FetchContent)
+
+FetchContent_Declare(
+    bezier
+    GIT_REPOSITORY https://github.com/oysteinmyrmo/bezier.git
+    GIT_TAG        v0.1.0
+)
+
+set(BEZIER_TESTS OFF) # Default ON
+FetchContent_MakeAvailable(bezier)
+
+...
+
+target_include_directories(some_target PRIVATE ${bezier_SOURCE_DIR}/include)
+```
+
+When this is done the library can be included by doing `#include "bezier.h"`.
+
 ## General Usage
 
 The following examples demonstrate how to use the library. In this context, `t` is the parametrized factor defining the Bezier curve, ranging from 0 to 1. Even though the Bezier curve is defined to be between `t = 0` and `t = 1`, there is nothing wrong with using other values for `t`, the results will only be outside the normal range of the bezier curve.
