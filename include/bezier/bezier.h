@@ -30,9 +30,9 @@
 #define BEZIER_DEFAULT_INTERVALS 10
 #define BEZIER_DEFAULT_MAX_ITERATIONS 15
 
-namespace Bezier
+namespace bezier
 {
-    namespace Math
+    namespace math
     {
         constexpr float PI = 3.14159265358979f;
 
@@ -52,7 +52,7 @@ namespace Bezier
         {
             return x >= -BEZIER_FUZZY_EPSILON && x <= (1.0 + BEZIER_FUZZY_EPSILON);
         }
-    }
+    } // namespace math
 
     template<size_t N>
     class BinomialCoefficients
@@ -65,7 +65,7 @@ namespace Bezier
 
             while (k <= center)
             {
-                mCoefficients[k] = Math::binomial(N, k);
+                mCoefficients[k] = math::binomial(N, k);
                 k++;
             }
 
@@ -221,7 +221,7 @@ namespace Bezier
 
         float angleDeg() const
         {
-            return angle() * 180.0f / Math::PI;
+            return angle() * 180.0f / math::PI;
         }
 
         float operator[](size_t axis) const
@@ -298,7 +298,7 @@ namespace Bezier
 
         bool isWithinZeroAndOne() const
         {
-            return Math::isWithinZeroAndOne(x) && Math::isWithinZeroAndOne(y);
+            return math::isWithinZeroAndOne(x) && math::isWithinZeroAndOne(y);
         }
 
         float x;
@@ -336,7 +336,7 @@ namespace Bezier
 
         bool add(const ExtremeValue& val)
         {
-            assert(Math::isWithinZeroAndOne(val.t));
+            assert(math::isWithinZeroAndOne(val.t));
             for (auto const &v : values)
             {
                 if (val.fuzzyEquals(v))
@@ -505,7 +505,7 @@ namespace Bezier
     class TightBoundingBox
     {
     public:
-        // Takes the ExtremePoints of the Bezier curve moved to origo and rotated to align the x-axis
+        // Takes the ExtremePoints of the bezier curve moved to origo and rotated to align the x-axis
         // as arguments as well as the translation/rotation used to calculate it.
         TightBoundingBox(const ExtremePoints& xPoints, const Vec2& translation, float rotation)
         {
@@ -630,7 +630,7 @@ namespace Bezier
 
         Bezier(const std::vector<Point>& controlPoints)
         {
-            assert(controlPoints.size() == size()); // The Bezier curve must be initialized with the expected number og points
+            assert(controlPoints.size() == size()); // The bezier curve must be initialized with the expected number of points
             for (size_t i = 0; i < controlPoints.size(); i++)
                 mControlPoints[i] = Point(controlPoints[i]);
         }
@@ -904,9 +904,9 @@ namespace Bezier
             assert(N == 2);
             ExtremeValues xVals;
             Point roots = (mControlPoints[0] - mControlPoints[1]) / (mControlPoints[0] - mControlPoints[1] * 2 + mControlPoints[2]);
-            if (Math::isWithinZeroAndOne(roots[0]))
+            if (math::isWithinZeroAndOne(roots[0]))
                 xVals.add(roots[0], 0);
-            if (Math::isWithinZeroAndOne(roots[1]))
+            if (math::isWithinZeroAndOne(roots[1]))
                 xVals.add(roots[1], 1);
             return xVals;
         }
@@ -946,7 +946,7 @@ namespace Bezier
 
                         if (fabs(nextZeroVal - zeroVal) < absEpsilon)
                         {
-                            if (Math::isWithinZeroAndOne(nextZeroVal))
+                            if (math::isWithinZeroAndOne(nextZeroVal))
                             {
                                 xVals.add(nextZeroVal, i);
                                 break;
@@ -978,4 +978,4 @@ namespace Bezier
     template<size_t N>
     const PolynomialCoefficients<N> Bezier<N>::polynomialCoefficients = PolynomialCoefficients<N>();
 
-} // namespace Bezier
+} // namespace bezier

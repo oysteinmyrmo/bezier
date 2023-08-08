@@ -1,11 +1,11 @@
 #pragma once
 #include <bezier/bezier.h>
 
-namespace Bezier
+namespace bezier
 {
-namespace Test
+namespace test
 {
-    ::Bezier::Bezier<3> defaultCubicBezier();
-    ::Bezier::Bezier<2> defaultQuadraticBezier();
-} // namespace Test
-} // namespace Bezier
+    ::bezier::Bezier<3> defaultCubicBezier();
+    ::bezier::Bezier<2> defaultQuadraticBezier();
+} // namespace test
+} // namespace bezier
