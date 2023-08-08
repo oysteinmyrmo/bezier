@@ -1,5 +1,5 @@
 #pragma once
-#include "bezier.h"
+#include <bezier/bezier.h>
 
 namespace Bezier
 {

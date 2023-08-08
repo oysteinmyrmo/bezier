@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare(
     bezier
     GIT_REPOSITORY https://github.com/oysteinmyrmo/bezier.git
-    GIT_TAG        v0.1.0
+    GIT_TAG        v0.2.0
 )
 
 set(BEZIER_TESTS OFF) # Default ON
@@ -22,10 +22,10 @@ FetchContent_MakeAvailable(bezier)
 
 ...
 
-target_include_directories(some_target PRIVATE ${bezier_SOURCE_DIR}/include)
+target_link_libraries(some_target PRIVATE bezier)
 ```
 
-When this is done the library can be included by doing `#include "bezier.h"`.
+When this is done the library can be included by doing `#include <bezier/bezier.h>`.
 
 ## General Usage
 
