@@ -17,7 +17,6 @@ add_executable(bezier-tests
     derivative-tests.cpp
 )
 
-target_link_libraries(bezier-tests PRIVATE Catch2::Catch2WithMain)
-target_include_directories(bezier-tests PRIVATE ${BEZIER_INCLUDE_DIR})
+target_link_libraries(bezier-tests PRIVATE Catch2::Catch2WithMain bezier)
 
 add_test(NAME bezier-tests COMMAND bezier-tests --durations yes)

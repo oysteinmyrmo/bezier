@@ -4,8 +4,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 option(BEZIER_TESTS "Build test suite" ON)
 
+add_library(bezier INTERFACE)
+target_include_directories(bezier INTERFACE include)
+
 if (BEZIER_TESTS)
-    set(BEZIER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
     enable_testing()
     add_subdirectory(tests)
 endif()
