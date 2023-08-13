@@ -14,6 +14,7 @@ add_executable(bezier-tests
     test_beziers.cpp
     test_beziers.h
     basic-tests.cpp
+    compile-time-tests.cpp
     derivative-tests.cpp
 )
 
