@@ -48,6 +48,22 @@ jobs:
           cxx: "g++",
           generator: "Unix Makefiles"
         }
+        - {
+          name: "Ubuntu 22.04 Clang",
+          os: ubuntu-22.04,
+          build_type: "Release",
+          cc: "clang",
+          cxx: "clang++",
+          generator: "Unix Makefiles"
+        }
+        - {
+          name: "Ubuntu 22.04 GCC",
+          os: ubuntu-22.04,
+          build_type: "Release",
+          cc: "gcc",
+          cxx: "g++",
+          generator: "Unix Makefiles"
+        }
     steps:
       - uses: actions/checkout@v3
       - name: Configure

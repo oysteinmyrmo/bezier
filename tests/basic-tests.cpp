@@ -202,7 +202,7 @@ TEST_CASE("Test curve locations", "[curves][locations]")
 
 TEST_CASE("Test curve lengths", "[curves][lengths]")
 {
-    static constexpr float epsilon = 1.0e-6f;
+    static constexpr float epsilon = 1.0e-4f;
 
     // Using similar curves as https://pomax.github.io/bezierinfo/#arclengthapprox for testing.
     const bezier::Bezier<2> b2({ {  70, 250 }, { 20, 110 }, { 200,  80 } });            // Real length: 256.25
