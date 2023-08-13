@@ -1,4 +1,4 @@
-/* Copyright © 2018 Øystein Myrmo (oystein.myrmo@gmail.com)
+/* Copyright © 2023 Øystein Myrmo (oystein.myrmo@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
