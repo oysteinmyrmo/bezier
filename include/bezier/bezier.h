@@ -97,9 +97,9 @@ namespace bezier
         size_t t = 0;
         size_t one_minus_t = 0;
 
-        float valueAt(float t) const
+        float valueAt(float tValue) const
         {
-            return float(pow(1.0f - t, one_minus_t) * pow(t, float(this->t)));
+            return float(pow(1.0f - tValue, one_minus_t) * pow(tValue, float(t)));
         }
     };
 
@@ -163,10 +163,10 @@ namespace bezier
             : Vec2(other.x, other.y, normalize)
         {}
 
-        void set(float x, float y)
+        void set(float xValue, float yValue)
         {
-            this->x = x;
-            this->y = y;
+            x = xValue;
+            y = yValue;
         }
 
         void set(const Vec2& other)
