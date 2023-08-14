@@ -767,7 +767,7 @@ namespace bezier
             std::array<Point, N+1> curr;
 
             // de Casteljau: https://pomax.github.io/bezierinfo/#splitting
-            int subs = 0;
+            size_t subs = 0;
             while (subs < N)
             {
                 for (size_t i = 0; i < N - subs; i++)
