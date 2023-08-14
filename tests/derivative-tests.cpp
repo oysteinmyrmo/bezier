@@ -202,37 +202,37 @@ TEST_CASE("Test normals", "[curves][normals]")
     bezier::Normal normal;
     CHECK(xVals.size() == 3);
 
-    normal = bezier3.normalAt(0.0);
+    normal = bezier3.normalAt(0.0f);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-0.425797045, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(-0.904818713, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(-2.01063895, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(-115.201126, epsilon));
 
-    normal = bezier3.normalAt(0.25);
+    normal = bezier3.normalAt(0.25f);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-0.823080122, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.567925274, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(2.53760958, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(145.394318, epsilon));
 
-    normal = bezier3.normalAt(0.50);
+    normal = bezier3.normalAt(0.50f);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.206010476, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.978549778, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(1.36330009, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(78.1113433, epsilon));
 
-    normal = bezier3.normalAt(0.75);
+    normal = bezier3.normalAt(0.75f);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.83892852, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.544241607, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(0.575484872, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(32.9728546, epsilon));
 
-    normal = bezier3.normalAt(0.666);
+    normal = bezier3.normalAt(0.666f);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.673921466, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.738803029, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(0.83129245, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(47.6295471, epsilon));
 
-    normal = bezier3.normalAt(0.333);
+    normal = bezier3.normalAt(0.333f);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-0.411881238, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.911237537, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(1.99531388, epsilon));
