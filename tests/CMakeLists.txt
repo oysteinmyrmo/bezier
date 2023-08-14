@@ -21,3 +21,9 @@ add_executable(bezier-tests
 target_link_libraries(bezier-tests PRIVATE Catch2::Catch2WithMain bezier)
 
 add_test(NAME bezier-tests COMMAND bezier-tests --durations yes)
+
+if(MSVC)
+  target_compile_options(bezier-tests PRIVATE /W4 /WX)
+else()
+  target_compile_options(bezier-tests PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
