@@ -642,12 +642,6 @@ namespace bezier
                 mControlPoints[i] = points[i];
         }
 
-        Bezier(const Bezier<N>& other)
-        {
-            for (size_t i = 0; i < other.size(); i++)
-                mControlPoints[i] = Point(other[i]);
-        }
-
         // The order of the bezier curve.
         size_t order() const
         {
