@@ -36,7 +36,6 @@
         {
             "name": "clang-ninja",
             "generator": "Ninja",
-            "architecture": "x64",
             "hidden": true,
             "inherits": "base",
             "cacheVariables": {
@@ -63,7 +62,6 @@
             "name": "gcc-ninja",
             "generator": "Ninja",
             "inherits": "base",
-            "architecture": "x64",
             "hidden": true,
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "g++",
@@ -169,25 +167,25 @@
         {
             "name": "clang-ninja-debug",
             "inherits": "base",
-            "configurePreset": "clang-ninja",
+            "configurePreset": "clang-ninja-debug",
             "configuration": "Debug"
         },
         {
             "name": "clang-ninja-release",
             "inherits": "base",
-            "configurePreset": "clang-ninja",
+            "configurePreset": "clang-ninja-release",
             "configuration": "Release"
         },
         {
             "name": "gcc-ninja-debug",
             "inherits": "base",
-            "configurePreset": "gcc-ninja",
+            "configurePreset": "gcc-ninja-debug",
             "configuration": "Debug"
         },
         {
             "name": "gcc-ninja-release",
             "inherits": "base",
-            "configurePreset": "gcc-ninja",
+            "configurePreset": "gcc-ninja-release",
             "configuration": "Release"
         }
     ]
