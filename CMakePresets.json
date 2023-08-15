@@ -1,0 +1,194 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 19,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}"
+        },
+        {
+            "name": "msvc",
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "inherits": "base",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "xcode",
+            "generator": "Xcode",
+            "inherits": "base",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "clang-ninja",
+            "generator": "Ninja",
+            "architecture": "x64",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "clang-ninja-debug",
+            "inherits": "clang-ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "clang-ninja-release",
+            "inherits": "clang-ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "gcc-ninja",
+            "generator": "Ninja",
+            "inherits": "base",
+            "architecture": "x64",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "gcc-ninja-debug",
+            "inherits": "gcc-ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "gcc-ninja-release",
+            "inherits": "gcc-ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc-debug",
+            "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-release",
+            "configurePreset": "msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "xcode-debug",
+            "configurePreset": "xcode",
+            "configuration": "Debug"
+        },
+        {
+            "name": "xcode-release",
+            "configurePreset": "xcode",
+            "configuration": "Release"
+        },
+        {
+            "name": "clang-ninja-debug",
+            "configurePreset": "clang-ninja-debug"
+        },
+        {
+            "name": "clang-ninja-release",
+            "configurePreset": "clang-ninja-release"
+        },
+        {
+            "name": "gcc-ninja-debug",
+            "configurePreset": "gcc-ninja-debug"
+        },
+        {
+            "name": "gcc-ninja-release",
+            "configurePreset": "gcc-ninja-release"
+         }
+    ],
+    "testPresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        },
+        {
+            "name": "msvc-debug",
+            "inherits": "base",
+            "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-release",
+            "inherits": "base",
+            "configurePreset": "msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "xcode-debug",
+            "inherits": "base",
+            "configurePreset": "xcode",
+            "configuration": "Debug"
+        },
+        {
+            "name": "xcode-release",
+            "inherits": "base",
+            "configurePreset": "xcode",
+            "configuration": "Release"
+        },
+        {
+            "name": "clang-ninja-debug",
+            "inherits": "base",
+            "configurePreset": "clang-ninja",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang-ninja-release",
+            "inherits": "base",
+            "configurePreset": "clang-ninja",
+            "configuration": "Release"
+        },
+        {
+            "name": "gcc-ninja-debug",
+            "inherits": "base",
+            "configurePreset": "gcc-ninja",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-ninja-release",
+            "inherits": "base",
+            "configurePreset": "gcc-ninja",
+            "configuration": "Release"
+        }
+    ]
+}
