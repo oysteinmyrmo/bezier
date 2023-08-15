@@ -1,0 +1,23 @@
+name: test_linux
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04]
+        compiler: [clang, gcc]
+        generator: [ninja]
+        config: [debug, release]
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.compiler }}-${{ matrix.generator }}-${{ matrix.config }} (${{ matrix.os }})
+    steps:
+      - uses: actions/checkout@v3
+      - uses: lukka/get-cmake@latest
+      - name: Configure
+        run: cmake --preset ${{ matrix.compiler }}-${{ matrix.generator }}-${{ matrix.config }}
+      - name: Build
+        run: cmake --build --preset ${{ matrix.compiler }}-${{ matrix.generator }}-${{ matrix.config }} --target bezier-tests
+      - name: Test
+        run: ctest --preset ${{ matrix.compiler }}-${{ matrix.generator }}-${{ matrix.config }}
