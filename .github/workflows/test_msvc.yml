@@ -1,0 +1,22 @@
+name: test_msvc
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        generator: [msvc]
+        config: [debug, release]
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.generator }}-${{ matrix.config }} (${{ matrix.os }})
+    steps:
+      - uses: actions/checkout@v3
+      - uses: lukka/get-cmake@latest
+      - name: Configure
+        run: cmake --preset ${{ matrix.generator }}
+      - name: Build
+        run: cmake --build --preset ${{ matrix.generator }}-${{ matrix.config }} --target bezier-tests
+      - name: Test
+        run: ctest --preset ${{ matrix.generator }}-${{ matrix.config }}
