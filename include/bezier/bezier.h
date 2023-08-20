@@ -26,15 +26,14 @@
 #include <algorithm>
 #include <array>
 
-#define BEZIER_FUZZY_EPSILON 0.0001
-#define BEZIER_DEFAULT_INTERVALS 10
-#define BEZIER_DEFAULT_MAX_ITERATIONS 15
-
 namespace bezier
 {
-    namespace math
+    namespace internal
     {
-        constexpr float PI = 3.14159265358979f;
+        constexpr double pi = 3.141592653589793238463;
+        constexpr double fuzzyEpsilon = 0.0001;
+        constexpr size_t newtonRhapsonDefaultIntervalCount = 10;
+        constexpr size_t newtonRhapsonDefaultMaxIterationCount = 15;
 
         inline size_t binomial(size_t n, size_t k)
         {
@@ -50,7 +49,7 @@ namespace bezier
 
         inline bool isWithinZeroAndOne(float x)
         {
-            return x >= -BEZIER_FUZZY_EPSILON && x <= (1.0 + BEZIER_FUZZY_EPSILON);
+            return x >= -fuzzyEpsilon && x <= (1.0 + fuzzyEpsilon);
         }
     } // namespace math
 
@@ -65,7 +64,7 @@ namespace bezier
 
             while (k <= center)
             {
-                mCoefficients[k] = math::binomial(N, k);
+                mCoefficients[k] = internal::binomial(N, k);
                 k++;
             }
 
@@ -221,7 +220,7 @@ namespace bezier
 
         float angleDeg() const
         {
-            return angle() * 180.0f / math::PI;
+            return angle() * 180.0 / internal::pi;
         }
 
         float operator[](size_t axis) const
@@ -287,7 +286,7 @@ namespace bezier
             bool equals = true;
             for (size_t axis = 0; axis < Vec2::size; axis++)
             {
-                if (fabs((*this)[axis] - other[axis]) >= BEZIER_FUZZY_EPSILON)
+                if (fabs((*this)[axis] - other[axis]) >= internal::fuzzyEpsilon)
                 {
                     equals = false;
                     break;
@@ -298,7 +297,7 @@ namespace bezier
 
         bool isWithinZeroAndOne() const
         {
-            return math::isWithinZeroAndOne(x) && math::isWithinZeroAndOne(y);
+            return internal::isWithinZeroAndOne(x) && internal::isWithinZeroAndOne(y);
         }
 
         float x;
@@ -319,7 +318,7 @@ namespace bezier
 
         bool fuzzyEquals(const ExtremeValue& other) const
         {
-            return axis == other.axis && fabs(t - other.t) < BEZIER_FUZZY_EPSILON;
+            return axis == other.axis && fabs(t - other.t) < internal::fuzzyEpsilon;
         }
 
         const float t;
@@ -336,7 +335,7 @@ namespace bezier
 
         bool add(const ExtremeValue& val)
         {
-            assert(math::isWithinZeroAndOne(val.t));
+            assert(internal::isWithinZeroAndOne(val.t));
             for (auto const &v : values)
             {
                 if (val.fuzzyEquals(v))
@@ -817,9 +816,9 @@ namespace bezier
             return t;
         }
 
-        ExtremeValues derivativeZero(size_t intervals = BEZIER_DEFAULT_INTERVALS,
-                                     float epsilon = BEZIER_FUZZY_EPSILON,
-                                     size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const
+        ExtremeValues derivativeZero(size_t intervals = internal::newtonRhapsonDefaultIntervalCount,
+                                     float epsilon = internal::fuzzyEpsilon,
+                                     size_t maxIterations = internal::newtonRhapsonDefaultMaxIterationCount) const
         {
             switch (N)
             {
@@ -898,9 +897,9 @@ namespace bezier
             assert(N == 2);
             ExtremeValues xVals;
             Point roots = (mControlPoints[0] - mControlPoints[1]) / (mControlPoints[0] - mControlPoints[1] * 2 + mControlPoints[2]);
-            if (math::isWithinZeroAndOne(roots[0]))
+            if (internal::isWithinZeroAndOne(roots[0]))
                 xVals.add(roots[0], 0);
-            if (math::isWithinZeroAndOne(roots[1]))
+            if (internal::isWithinZeroAndOne(roots[1]))
                 xVals.add(roots[1], 1);
             return xVals;
         }
@@ -912,9 +911,9 @@ namespace bezier
             return ExtremeValues();
         }
 
-        ExtremeValues newtonRhapson(size_t intervals = BEZIER_DEFAULT_INTERVALS,
-                                    float epsilon = BEZIER_FUZZY_EPSILON,
-                                    size_t maxIterations = BEZIER_DEFAULT_MAX_ITERATIONS) const
+        ExtremeValues newtonRhapson(size_t intervals = internal::newtonRhapsonDefaultIntervalCount,
+                                    float epsilon = internal::fuzzyEpsilon,
+                                    size_t maxIterations = internal::newtonRhapsonDefaultMaxIterationCount) const
         {
             assert(N >= 2);
             ExtremeValues xVals;
@@ -940,7 +939,7 @@ namespace bezier
 
                         if (fabs(nextZeroVal - zeroVal) < absEpsilon)
                         {
-                            if (math::isWithinZeroAndOne(nextZeroVal))
+                            if (internal::isWithinZeroAndOne(nextZeroVal))
                             {
                                 xVals.add(nextZeroVal, i);
                                 break;
