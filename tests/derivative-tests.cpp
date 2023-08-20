@@ -59,7 +59,7 @@ TEST_CASE("Test derivatives", "[derivatives]")
 
 TEST_CASE("Test extreme values", "[extreme_values]")
 {
-    static constexpr float epsilon = 1.0e-4f;
+    static constexpr double epsilon = 1.0e-4;
 
     bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
 
@@ -84,7 +84,7 @@ TEST_CASE("Test extreme values", "[extreme_values]")
     CHECK_THAT(aabb.maxY(), Catch::Matchers::WithinAbs(198.86235, epsilon));
     CHECK_THAT(aabb.width(), Catch::Matchers::WithinAbs(122.335464, epsilon));
     CHECK_THAT(aabb.height(), Catch::Matchers::WithinAbs(158.86235, epsilon));
-    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.5, epsilon));
+    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.499222, epsilon));
 
     bezier::TBB tbb = bezier3.tbb();
     CHECK(tbb.size() == 4);
@@ -94,7 +94,7 @@ TEST_CASE("Test extreme values", "[extreme_values]")
     CHECK_THAT(tbb.maxY(), Catch::Matchers::WithinAbs(222.517883, epsilon));
     CHECK_THAT(tbb.width(), Catch::Matchers::WithinAbs(60.5054359, epsilon));
     CHECK_THAT(tbb.height(), Catch::Matchers::WithinAbs(192.036713, epsilon));
-    CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(11619.2646, epsilon));
+    CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(11619.263247, epsilon));
 
     bezier::Bezier<2> bezier2 = bezier::test::defaultQuadraticBezier();
 
@@ -116,7 +116,7 @@ TEST_CASE("Test extreme values", "[extreme_values]")
     CHECK_THAT(aabb.maxY(), Catch::Matchers::WithinAbs(155.0, epsilon));
     CHECK_THAT(aabb.width(), Catch::Matchers::WithinAbs(49.2307739, epsilon));
     CHECK_THAT(aabb.height(), Catch::Matchers::WithinAbs(80.0, epsilon));
-    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(3938.46191, epsilon));
+    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(3938.461538, epsilon));
 
     tbb = bezier2.tbb();
     CHECK(tbb.size() == 4);
@@ -126,49 +126,49 @@ TEST_CASE("Test extreme values", "[extreme_values]")
     CHECK_THAT(tbb.maxY(), Catch::Matchers::WithinAbs(155.0, epsilon));
     CHECK_THAT(tbb.width(), Catch::Matchers::WithinAbs(31.3085079, epsilon));
     CHECK_THAT(tbb.height(), Catch::Matchers::WithinAbs(85.4400406, epsilon));
-    CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(2674.99951, epsilon));
+    CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(2675.0, epsilon));
 }
 
 TEST_CASE("Test tangents", "[curves][tangents]")
 {
-    static constexpr float epsilon = 1.0e-1f;
+    static constexpr double epsilon = 1.0e-1;
 
     bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
     bezier::ExtremeValues xVals = bezier3.derivativeZero();
     bezier::Tangent tangent;
     CHECK(xVals.size() == 3);
 
-    tangent = bezier3.tangentAt(0.0f);
+    tangent = bezier3.tangentAt(0.0);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(-0.904818713, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(0.425797045, epsilon));
     CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(2.70175004, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(154.798874, epsilon));
 
-    tangent = bezier3.tangentAt(0.25f);
+    tangent = bezier3.tangentAt(0.25);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.567925274, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(0.823080122, epsilon));
     CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(0.966813385, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(55.3943253, epsilon));
 
-    tangent = bezier3.tangentAt(0.50f);
+    tangent = bezier3.tangentAt(0.50);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.978549778, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(-0.206010476, epsilon));
     CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-0.207496226, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(-11.8886576, epsilon));
 
-    tangent = bezier3.tangentAt(0.75f);
+    tangent = bezier3.tangentAt(0.75);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.544241607, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(-0.83892852, epsilon));
     CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-0.995311498, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(-57.0271492, epsilon));
 
-    tangent = bezier3.tangentAt(0.666f);
+    tangent = bezier3.tangentAt(0.666);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.738803029, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(-0.673921466, epsilon));
     CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-0.73950386, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(-42.3704491, epsilon));
 
-    tangent = bezier3.tangentAt(0.333f);
+    tangent = bezier3.tangentAt(0.333);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.911237537, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(0.411881238, epsilon));
     CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(0.424517602, epsilon));
@@ -202,37 +202,37 @@ TEST_CASE("Test normals", "[curves][normals]")
     bezier::Normal normal;
     CHECK(xVals.size() == 3);
 
-    normal = bezier3.normalAt(0.0f);
+    normal = bezier3.normalAt(0.0);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-0.425797045, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(-0.904818713, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(-2.01063895, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(-115.201126, epsilon));
 
-    normal = bezier3.normalAt(0.25f);
+    normal = bezier3.normalAt(0.25);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-0.823080122, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.567925274, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(2.53760958, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(145.394318, epsilon));
 
-    normal = bezier3.normalAt(0.50f);
+    normal = bezier3.normalAt(0.50);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.206010476, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.978549778, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(1.36330009, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(78.1113433, epsilon));
 
-    normal = bezier3.normalAt(0.75f);
+    normal = bezier3.normalAt(0.75);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.83892852, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.544241607, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(0.575484872, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(32.9728546, epsilon));
 
-    normal = bezier3.normalAt(0.666f);
+    normal = bezier3.normalAt(0.666);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.673921466, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.738803029, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(0.83129245, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(47.6295471, epsilon));
 
-    normal = bezier3.normalAt(0.333f);
+    normal = bezier3.normalAt(0.333);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-0.411881238, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.911237537, epsilon));
     CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(1.99531388, epsilon));

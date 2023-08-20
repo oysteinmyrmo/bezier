@@ -172,71 +172,71 @@ TEST_CASE("Test control points", "[control_points]")
     CHECK(bezier2.size() == 3);
 
     bezier::Point &p = bezier2[0];
-    bezier::test::fuzzyCheckPoint(p, 0.0f, 0.0f, epsilon);
+    bezier::test::fuzzyCheckPoint(p, 0.0, 0.0, epsilon);
 
-    p.set(1.0f, 2.0);
-    bezier::test::fuzzyCheckPoint(p, 1.0f, 2.0f, epsilon);
+    p.set(1.0, 2.0);
+    bezier::test::fuzzyCheckPoint(p, 1.0, 2.0, epsilon);
 
     p.translate(1, -1);
-    bezier::test::fuzzyCheckPoint(p, 2.0f, 1.0f, epsilon);
+    bezier::test::fuzzyCheckPoint(p, 2.0, 1.0, epsilon);
 }
 
 TEST_CASE("Test curve locations", "[curves][locations]")
 {
     const bezier::Bezier<3> bezier3 = bezier::test::defaultCubicBezier();
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.00f), 120.0, 160.0);
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(1.00f), 220.0, 40.0);
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.25f), 99.765625, 189.0625);
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.50f), 138.125, 197.5);
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.75f), 192.421875, 157.1875);
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(-0.35f), 327.983124, 138.212509);
-    bezier::test::fuzzyCheckPoint(bezier3.valueAt(1.50f), 24.375, -537.5);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.00), 120.0, 160.0);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(1.00), 220.0, 40.0);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.25), 99.765625, 189.0625);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.50), 138.125, 197.5);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(0.75), 192.421875, 157.1875);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(-0.35), 327.983125, 138.2125);
+    bezier::test::fuzzyCheckPoint(bezier3.valueAt(1.50), 24.375, -537.5);
 
     const bezier::Bezier<2> bezier2 = bezier::test::defaultQuadraticBezier();
-    bezier::test::fuzzyCheckPoint(bezier2.valueAt(0.0f), 70.0, 155.0);
-    bezier::test::fuzzyCheckPoint(bezier2.valueAt(1.0f), 100.0, 75.0);
-    bezier::test::fuzzyCheckPoint(bezier2.valueAt(0.5f), 52.5, 112.5);
-    bezier::test::fuzzyCheckPoint(bezier2.valueAt(-1.0f), 300.0, 255.0);
-    bezier::test::fuzzyCheckPoint(bezier2.valueAt(2.0f), 390.0, 15.0);
+    bezier::test::fuzzyCheckPoint(bezier2.valueAt(0.0), 70.0, 155.0);
+    bezier::test::fuzzyCheckPoint(bezier2.valueAt(1.0), 100.0, 75.0);
+    bezier::test::fuzzyCheckPoint(bezier2.valueAt(0.5), 52.5, 112.5);
+    bezier::test::fuzzyCheckPoint(bezier2.valueAt(-1.0), 300.0, 255.0);
+    bezier::test::fuzzyCheckPoint(bezier2.valueAt(2.0), 390.0, 15.0);
 }
 
 TEST_CASE("Test curve lengths", "[curves][lengths]")
 {
-    static constexpr float epsilon = 1.0e-4f;
+    static constexpr double epsilon = 1.0e-9;
 
     // Using similar curves as https://pomax.github.io/bezierinfo/#arclengthapprox for testing.
     const bezier::Bezier<2> b2({ {  70, 250 }, { 20, 110 }, { 200,  80 } });            // Real length: 256.25
     const bezier::Bezier<3> b3({ { 120, 160 }, { 35, 200 }, { 220, 260 }, {220, 40} }); // Real length: 272.87
 
     CHECK_THAT(b2.length(0),    Catch::Matchers::WithinAbs(0.0, epsilon));
-    CHECK_THAT(b2.length(1),    Catch::Matchers::WithinAbs(214.009338, epsilon));
-    CHECK_THAT(b2.length(2),    Catch::Matchers::WithinAbs(248.073410, epsilon));
-    CHECK_THAT(b2.length(3),    Catch::Matchers::WithinAbs(252.609528, epsilon));
-    CHECK_THAT(b2.length(5),    Catch::Matchers::WithinAbs(254.948517, epsilon));
-    CHECK_THAT(b2.length(10),   Catch::Matchers::WithinAbs(255.927200, epsilon));
-    CHECK_THAT(b2.length(15),   Catch::Matchers::WithinAbs(256.107788, epsilon));
-    CHECK_THAT(b2.length(20),   Catch::Matchers::WithinAbs(256.171021, epsilon));
-    CHECK_THAT(b2.length(50),   Catch::Matchers::WithinAbs(256.239044, epsilon));
-    CHECK_THAT(b2.length(100),  Catch::Matchers::WithinAbs(256.248718, epsilon));
-    CHECK_THAT(b2.length(),     Catch::Matchers::WithinAbs(256.248718, epsilon)); // Same as 100 (default number of intervals)
-    CHECK_THAT(b2.length(200),  Catch::Matchers::WithinAbs(256.251160, epsilon));
-    CHECK_THAT(b2.length(500),  Catch::Matchers::WithinAbs(256.249878, epsilon));
-    CHECK_THAT(b2.length(1000), Catch::Matchers::WithinAbs(256.248779, epsilon));
+    CHECK_THAT(b2.length(1),    Catch::Matchers::WithinAbs(214.0093455903, epsilon));
+    CHECK_THAT(b2.length(2),    Catch::Matchers::WithinAbs(248.0734088650, epsilon));
+    CHECK_THAT(b2.length(3),    Catch::Matchers::WithinAbs(252.6095162484, epsilon));
+    CHECK_THAT(b2.length(5),    Catch::Matchers::WithinAbs(254.9485167318, epsilon));
+    CHECK_THAT(b2.length(10),   Catch::Matchers::WithinAbs(255.9271347656, epsilon));
+    CHECK_THAT(b2.length(15),   Catch::Matchers::WithinAbs(256.1078002736, epsilon));
+    CHECK_THAT(b2.length(20),   Catch::Matchers::WithinAbs(256.1709910518, epsilon));
+    CHECK_THAT(b2.length(50),   Catch::Matchers::WithinAbs(256.2392124745, epsilon));
+    CHECK_THAT(b2.length(100),  Catch::Matchers::WithinAbs(256.2489563025, epsilon));
+    CHECK_THAT(b2.length(),     Catch::Matchers::WithinAbs(256.2489563025, epsilon)); // Same as 100 (default number of intervals)
+    CHECK_THAT(b2.length(200),  Catch::Matchers::WithinAbs(256.2513921779, epsilon));
+    CHECK_THAT(b2.length(500),  Catch::Matchers::WithinAbs(256.2520742171, epsilon));
+    CHECK_THAT(b2.length(1000), Catch::Matchers::WithinAbs(256.2521716511, epsilon));
 
     CHECK_THAT(b3.length(0),    Catch::Matchers::WithinAbs(0.0, epsilon));
-    CHECK_THAT(b3.length(1),    Catch::Matchers::WithinAbs(156.204987, epsilon));
-    CHECK_THAT(b3.length(2),    Catch::Matchers::WithinAbs(219.160416, epsilon));
-    CHECK_THAT(b3.length(3),    Catch::Matchers::WithinAbs(251.716125, epsilon));
-    CHECK_THAT(b3.length(5),    Catch::Matchers::WithinAbs(266.579285, epsilon));
-    CHECK_THAT(b3.length(10),   Catch::Matchers::WithinAbs(271.217773, epsilon));
-    CHECK_THAT(b3.length(15),   Catch::Matchers::WithinAbs(272.134460, epsilon));
-    CHECK_THAT(b3.length(20),   Catch::Matchers::WithinAbs(272.456390, epsilon));
-    CHECK_THAT(b3.length(50),   Catch::Matchers::WithinAbs(272.803558, epsilon));
-    CHECK_THAT(b3.length(100),  Catch::Matchers::WithinAbs(272.853027, epsilon));
-    CHECK_THAT(b3.length(),     Catch::Matchers::WithinAbs(272.853027, epsilon)); // Same as 100 (default number of intervals)
-    CHECK_THAT(b3.length(200),  Catch::Matchers::WithinAbs(272.865356, epsilon));
-    CHECK_THAT(b3.length(500),  Catch::Matchers::WithinAbs(272.865540, epsilon));
-    CHECK_THAT(b3.length(1000), Catch::Matchers::WithinAbs(272.863708, epsilon));
+    CHECK_THAT(b3.length(1),    Catch::Matchers::WithinAbs(156.2049935181, epsilon));
+    CHECK_THAT(b3.length(2),    Catch::Matchers::WithinAbs(219.1604205966, epsilon));
+    CHECK_THAT(b3.length(3),    Catch::Matchers::WithinAbs(251.7161087303, epsilon));
+    CHECK_THAT(b3.length(5),    Catch::Matchers::WithinAbs(266.5793102154, epsilon));
+    CHECK_THAT(b3.length(10),   Catch::Matchers::WithinAbs(271.2177197099, epsilon));
+    CHECK_THAT(b3.length(15),   Catch::Matchers::WithinAbs(272.1344784655, epsilon));
+    CHECK_THAT(b3.length(20),   Catch::Matchers::WithinAbs(272.4562993937, epsilon));
+    CHECK_THAT(b3.length(50),   Catch::Matchers::WithinAbs(272.8038407242, epsilon));
+    CHECK_THAT(b3.length(100),  Catch::Matchers::WithinAbs(272.8534828102, epsilon));
+    CHECK_THAT(b3.length(),     Catch::Matchers::WithinAbs(272.8534828102, epsilon)); // Same as 100 (default number of intervals)
+    CHECK_THAT(b3.length(200),  Catch::Matchers::WithinAbs(272.8658930575, epsilon));
+    CHECK_THAT(b3.length(500),  Catch::Matchers::WithinAbs(272.8693679070, epsilon));
+    CHECK_THAT(b3.length(1000), Catch::Matchers::WithinAbs(272.8698643134, epsilon));
 }
 
 TEST_CASE("Test splitting of curves", "[curves][splitting]")
@@ -256,7 +256,7 @@ TEST_CASE("Test splitting of curves", "[curves][splitting]")
     CHECK(split_05.left.order() == b3.order());
     CHECK(split_05.right.order() == b3.order());
 
-    const auto split_08 = b3.split(0.8f);
+    const auto split_08 = b3.split(0.8);
     bezier::test::fuzzyCheckPoint(split_08.left[0], 120.0, 160.0);
     bezier::test::fuzzyCheckPoint(split_08.left[1], 52.0, 192.0);
     bezier::test::fuzzyCheckPoint(split_08.left[2], 156.8, 236.8);
@@ -268,7 +268,7 @@ TEST_CASE("Test splitting of curves", "[curves][splitting]")
     CHECK(split_08.left.order() == b3.order());
     CHECK(split_08.right.order() == b3.order());
 
-    const auto split_033 = b3.split(0.33f);
+    const auto split_033 = b3.split(0.33);
     bezier::test::fuzzyCheckPoint(split_033.left[0], 120.0, 160.0);
     bezier::test::fuzzyCheckPoint(split_033.left[1], 91.950, 173.2);
     bezier::test::fuzzyCheckPoint(split_033.left[2], 93.303, 188.578);
@@ -283,9 +283,9 @@ TEST_CASE("Test splitting of curves", "[curves][splitting]")
 
 TEST_CASE("Test arch points", "[curves][archs]")
 {
-    static constexpr float epsilon = 1.0e-4f;
+    static constexpr double epsilon = 1.0e-4;
 
-    float t;
+    double t;
     bezier::Point point;
 
     bezier::Bezier<2> a({ {80, 20}, {50, 10}, {95, 95} });
@@ -322,25 +322,25 @@ TEST_CASE("Test arch points", "[curves][archs]")
     bezier::test::fuzzyCheckPoint(point, 183.83701, 168.76790);
 
     // High epsilon, high max search depth.
-    t = cubicBezier.archMidPoint(1e-8f, 1000);
+    t = cubicBezier.archMidPoint(1.0e-8, 1000);
     point = cubicBezier.valueAt(t);
     CHECK_THAT(t, Catch::Matchers::WithinAbs(0.70718, epsilon));
     bezier::test::fuzzyCheckPoint(point, 183.83712, 168.76769);
 
     // High epsilon, low max search depth. Will not be precise.
-    t = cubicBezier.archMidPoint(1e-8f, 10);
+    t = cubicBezier.archMidPoint(1.0e-8, 10);
     point = cubicBezier.valueAt(t);
     CHECK_THAT(t, Catch::Matchers::WithinAbs(0.70752, epsilon));
     bezier::test::fuzzyCheckPoint(point, 183.90683, 168.68553);
 
     // Low epsilon, high max search depth. Will not be precise.
-    t = cubicBezier.archMidPoint(0.1f, 1000);
+    t = cubicBezier.archMidPoint(0.1, 1000);
     point = cubicBezier.valueAt(t);
     CHECK_THAT(t, Catch::Matchers::WithinAbs(0.70703, epsilon));
     bezier::test::fuzzyCheckPoint(point, 183.80527, 168.80531);
 
     // Low epsilon, low max search depth. Will not be precise.
-    t = cubicBezier.archMidPoint(0.1f, 10);
+    t = cubicBezier.archMidPoint(0.1, 10);
     point = cubicBezier.valueAt(t);
     CHECK_THAT(t, Catch::Matchers::WithinAbs(0.70703, epsilon));
     bezier::test::fuzzyCheckPoint(point, 183.80527, 168.80531);
@@ -349,7 +349,7 @@ TEST_CASE("Test arch points", "[curves][archs]")
 // The test that exists in README.md, because it should be correct.
 TEST_CASE("Test README examples", "[readme]")
 {
-    static constexpr float epsilon = 1.0e-4f;
+    static constexpr double epsilon = 1.0e-4;
 
     // Create a cubic bezier with 4 points. Visualized at https://www.desmos.com/calculator/fivneeogmh
     bezier::Bezier<3> cubicBezier({ {120, 160}, {35, 200}, {220, 260}, {220, 40} });
@@ -362,13 +362,13 @@ TEST_CASE("Test README examples", "[readme]")
     bezier::test::fuzzyCheckPoint(p, 138.125, 197.5);
 
     // Get coordinate values for a single axis. Currently only supports 2D.
-    float value;
+    double value;
     value = cubicBezier.valueAt(1, 0);    // 220 (x-coordinate at t = 1)
     CHECK_THAT(value, Catch::Matchers::WithinAbs(220.0, epsilon));
     value = cubicBezier.valueAt(0.75, 1); // 157.1875 (y-coordinate at t = 0.75)
     CHECK_THAT(value, Catch::Matchers::WithinAbs(157.1875, epsilon));
     value = cubicBezier.length();         // 272.85 (Arc length of the bezier curve)
-    CHECK_THAT(value, Catch::Matchers::WithinAbs(272.853, epsilon));
+    CHECK_THAT(value, Catch::Matchers::WithinAbs(272.85348281, epsilon));
 
     // Translate and rotate bezier curves.
     bezier::Bezier<3> copy = cubicBezier;
@@ -376,12 +376,12 @@ TEST_CASE("Test README examples", "[readme]")
     CHECK_THAT(copy.valueAt(0, 0), Catch::Matchers::WithinAbs(130.0, epsilon));
     CHECK_THAT(copy.valueAt(0, 1), Catch::Matchers::WithinAbs(175.0, epsilon));
     copy.rotate(0.5);             // Rotate 0.5 radians around the origin
-    copy.rotate(3.14f, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
+    copy.rotate(3.14, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
 
     // Get normals along the bezier curve.
     bezier::Normal normal = cubicBezier.normalAt(0.75); // Get normalized normal at t = 0.75. Add false as second argument to disable normalization.
-    float angle = normal.angle();       // Angle in radians
-    float angleDeg = normal.angleDeg(); // Angle in degrees
+    double angle = normal.angle();       // Angle in radians
+    double angleDeg = normal.angleDeg(); // Angle in degrees
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.83892852, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.544241607, epsilon));
     CHECK_THAT(angle, Catch::Matchers::WithinAbs(0.575484872, epsilon));
@@ -430,7 +430,7 @@ TEST_CASE("Test README examples", "[readme]")
     CHECK_THAT(aabb.maxY(), Catch::Matchers::WithinAbs(198.86235, epsilon));
     CHECK_THAT(aabb.width(), Catch::Matchers::WithinAbs(122.335464, epsilon));
     CHECK_THAT(aabb.height(), Catch::Matchers::WithinAbs(158.86235, epsilon));
-    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.5, epsilon));
+    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.499222, epsilon));
     aabb = cubicBezier.aabb(xPoints);                   // Or get from extreme points (if you already have them) to reduce calculation time
     CHECK(aabb.size() == 4);
     CHECK_THAT(aabb.minX(), Catch::Matchers::WithinAbs(97.6645355, epsilon));
@@ -439,7 +439,7 @@ TEST_CASE("Test README examples", "[readme]")
     CHECK_THAT(aabb.maxY(), Catch::Matchers::WithinAbs(198.86235, epsilon));
     CHECK_THAT(aabb.width(), Catch::Matchers::WithinAbs(122.335464, epsilon));
     CHECK_THAT(aabb.height(), Catch::Matchers::WithinAbs(158.86235, epsilon));
-    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.5, epsilon));
+    CHECK_THAT(aabb.area(), Catch::Matchers::WithinAbs(19434.499222, epsilon));
     bezier::TightBoundingBox tbb = cubicBezier.tbb();   // Tight bounding box
     CHECK(tbb.size() == 4);
     CHECK_THAT(tbb.minX(), Catch::Matchers::WithinAbs(92.568962, epsilon));
@@ -448,11 +448,11 @@ TEST_CASE("Test README examples", "[readme]")
     CHECK_THAT(tbb.maxY(), Catch::Matchers::WithinAbs(222.517883, epsilon));
     CHECK_THAT(tbb.width(), Catch::Matchers::WithinAbs(60.5054359, epsilon));
     CHECK_THAT(tbb.height(), Catch::Matchers::WithinAbs(192.036713, epsilon));
-    CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(11619.2646, epsilon));
+    CHECK_THAT(tbb.area(), Catch::Matchers::WithinAbs(11619.263248, epsilon));
 
     // Split the bezier curve at desired points. The left and right parts are new bezier curves
     // of the same order as the original curve.
-    auto split = cubicBezier.split(0.5f);
+    auto split = cubicBezier.split(0.5);
     bezier::test::fuzzyCheckPoint(split.left[0], 120.0, 160.0);
     bezier::test::fuzzyCheckPoint(split.left[1], 77.5, 180.0);
     bezier::test::fuzzyCheckPoint(split.left[2], 102.5, 205.0);
@@ -465,7 +465,7 @@ TEST_CASE("Test README examples", "[readme]")
     CHECK(split.right.order() == cubicBezier.order());
 
     // Find the mid point on the curve by arch length.
-    float tAtMidPoint = cubicBezier.archMidPoint();
+    double tAtMidPoint = cubicBezier.archMidPoint();
     bezier::Point midPoint = cubicBezier.valueAt(tAtMidPoint);
     CHECK_THAT(tAtMidPoint, Catch::Matchers::WithinAbs(0.70718, epsilon));
     bezier::test::fuzzyCheckPoint(midPoint, 183.83701, 168.76790);
