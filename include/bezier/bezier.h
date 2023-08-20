@@ -47,7 +47,7 @@ namespace bezier
             return val;
         }
 
-        inline bool isWithinZeroAndOne(float x)
+        inline bool isWithinZeroAndOne(double x)
         {
             return x >= -fuzzyEpsilon && x <= (1.0 + fuzzyEpsilon);
         }
@@ -96,9 +96,9 @@ namespace bezier
         size_t t = 0;
         size_t one_minus_t = 0;
 
-        float valueAt(float tValue) const
+        double valueAt(double tValue) const
         {
-            return float(pow(1.0f - tValue, one_minus_t) * pow(tValue, float(t)));
+            return std::pow(1.0 - tValue, double(one_minus_t)) * std::pow(tValue, double(t));
         }
     };
 
@@ -116,7 +116,7 @@ namespace bezier
             }
         }
 
-        float valueAt(size_t pos, float t) const
+        double valueAt(size_t pos, double t) const
         {
             assert(pos < size());
             return mPolynomialPairs[pos].valueAt(t);
@@ -145,12 +145,12 @@ namespace bezier
             , y(0)
         {}
 
-        Vec2(float x, float y)
+        Vec2(double x, double y)
             : x(x)
             , y(y)
         {}
 
-        Vec2(float x, float y, bool normalize)
+        Vec2(double x, double y, bool normalize)
             : x(x)
             , y(y)
         {
@@ -162,7 +162,7 @@ namespace bezier
             : Vec2(other.x, other.y, normalize)
         {}
 
-        void set(float xValue, float yValue)
+        void set(double xValue, double yValue)
         {
             x = xValue;
             y = yValue;
@@ -174,19 +174,19 @@ namespace bezier
             this->y = other.y;
         }
 
-        float length() const
+        double length() const
         {
-            return sqrt(x*x + y*y);
+            return std::sqrt(x*x + y*y);
         }
 
         void normalize()
         {
-            float len = length();
+            double len = length();
             x /= len;
             y /= len;
         }
 
-        void translate(float dx, float dy)
+        void translate(double dx, double dy)
         {
             x += dx;
             y += dy;
@@ -198,32 +198,32 @@ namespace bezier
             y += distance.y;
         }
 
-        void rotate(float angle, const Vec2& pivot = Vec2(0, 0))
+        void rotate(double angle, const Vec2& pivot = Vec2(0, 0))
         {
-            float s = sin(angle);
-            float c = cos(angle);
+            double s = std::sin(angle);
+            double c = std::cos(angle);
 
             x -= pivot.x;
             y -= pivot.y;
 
-            float xnew = x * c - y * s;
-            float ynew = x * s + y * c;
+            double xnew = x * c - y * s;
+            double ynew = x * s + y * c;
 
             x = xnew + pivot.x;
             y = ynew + pivot.y;
         }
 
-        float angle() const
+        double angle() const
         {
-            return atan2f(y, x);
+            return std::atan2(y, x);
         }
 
-        float angleDeg() const
+        double angleDeg() const
         {
             return angle() * 180.0 / internal::pi;
         }
 
-        float operator[](size_t axis) const
+        double operator[](size_t axis) const
         {
             assert(axis < Vec2::size);
             switch (axis)
@@ -237,7 +237,7 @@ namespace bezier
             }
         }
 
-        float& operator[](size_t axis)
+        double& operator[](size_t axis)
         {
             assert(axis < Vec2::size);
             switch (axis)
@@ -266,12 +266,12 @@ namespace bezier
             return Vec2(-x, -y);
         }
 
-        Vec2 operator*(float scale) const
+        Vec2 operator*(double scale) const
         {
             return Vec2(x * scale, y * scale);
         }
 
-        Vec2 operator/(float scale) const
+        Vec2 operator/(double scale) const
         {
             return Vec2(x / scale, y / scale);
         }
@@ -286,7 +286,7 @@ namespace bezier
             bool equals = true;
             for (size_t axis = 0; axis < Vec2::size; axis++)
             {
-                if (fabs((*this)[axis] - other[axis]) >= internal::fuzzyEpsilon)
+                if (std::abs((*this)[axis] - other[axis]) >= internal::fuzzyEpsilon)
                 {
                     equals = false;
                     break;
@@ -300,8 +300,8 @@ namespace bezier
             return internal::isWithinZeroAndOne(x) && internal::isWithinZeroAndOne(y);
         }
 
-        float x;
-        float y;
+        double x;
+        double y;
         static constexpr size_t size = 2;
     };
 
@@ -311,7 +311,7 @@ namespace bezier
 
     struct ExtremeValue
     {
-        ExtremeValue(float t, size_t axis)
+        ExtremeValue(double t, size_t axis)
             : t(t)
             , axis(axis)
         {}
@@ -321,14 +321,14 @@ namespace bezier
             return axis == other.axis && fabs(t - other.t) < internal::fuzzyEpsilon;
         }
 
-        const float t;
+        const double t;
         const size_t axis;
     };
 
     class ExtremeValues
     {
     public:
-        bool add(float t, size_t axis)
+        bool add(double t, size_t axis)
         {
             return add(ExtremeValue(t, axis));
         }
@@ -369,7 +369,7 @@ namespace bezier
     class ExtremePoints
     {
     public:
-        bool add(float x, float y)
+        bool add(double x, double y)
         {
             return add(Point(x, y));
         }
@@ -420,10 +420,10 @@ namespace bezier
 
         AxisAlignedBoundingBox(const ExtremePoints& xPoints)
         {
-            float minX = std::numeric_limits<float>::max();
-            float maxX = -std::numeric_limits<float>::max();
-            float minY = std::numeric_limits<float>::max();
-            float maxY = -std::numeric_limits<float>::max();
+            double minX = std::numeric_limits<double>::max();
+            double maxX = -std::numeric_limits<double>::max();
+            double minY = std::numeric_limits<double>::max();
+            double maxY = -std::numeric_limits<double>::max();
 
             for (size_t i = 0; i < xPoints.size(); i++)
             {
@@ -448,37 +448,37 @@ namespace bezier
             return 4;
         }
 
-        float minX() const
+        double minX() const
         {
             return points[0].x;
         }
 
-        float maxX() const
+        double maxX() const
         {
             return points[2].x;
         }
 
-        float minY() const
+        double minY() const
         {
             return points[0].y;
         }
 
-        float maxY() const
+        double maxY() const
         {
             return points[2].y;
         }
 
-        float width() const
+        double width() const
         {
             return maxX() - minX();
         }
 
-        float height() const
+        double height() const
         {
             return maxY() - minY();
         }
 
-        float area() const
+        double area() const
         {
             return width() * height();
         }
@@ -506,12 +506,12 @@ namespace bezier
     public:
         // Takes the ExtremePoints of the bezier curve moved to origo and rotated to align the x-axis
         // as arguments as well as the translation/rotation used to calculate it.
-        TightBoundingBox(const ExtremePoints& xPoints, const Vec2& translation, float rotation)
+        TightBoundingBox(const ExtremePoints& xPoints, const Vec2& translation, double rotation)
         {
-            float minX = std::numeric_limits<float>::max();
-            float maxX = -std::numeric_limits<float>::max();
-            float minY = std::numeric_limits<float>::max();
-            float maxY = -std::numeric_limits<float>::max();
+            double minX = std::numeric_limits<double>::max();
+            double maxX = -std::numeric_limits<double>::max();
+            double minY = std::numeric_limits<double>::max();
+            double maxY = -std::numeric_limits<double>::max();
 
             for (size_t i = 0; i < xPoints.size(); i++)
             {
@@ -545,44 +545,44 @@ namespace bezier
             return 4;
         }
 
-        float minX() const
+        double minX() const
         {
             return std::min({points[0].x, points[1].x, points[2].x, points[3].x});
         }
 
-        float maxX() const
+        double maxX() const
         {
             return std::max({points[0].x, points[1].x, points[2].x, points[3].x});
         }
 
-        float minY() const
+        double minY() const
         {
             return std::min({points[0].y, points[1].y, points[2].y, points[3].y});
         }
 
-        float maxY() const
+        double maxY() const
         {
             return std::max({points[0].y, points[1].y, points[2].y, points[3].y});
         }
 
-        float area() const
+        double area() const
         {
             return width() * height();
         }
 
         // Uses the two first points to calculate the "width".
-        float width() const
+        double width() const
         {
-            float x = points[1].x - points[0].x;
-            float y = points[1].y - points[0].y;
+            double x = points[1].x - points[0].x;
+            double y = points[1].y - points[0].y;
             return sqrt(x * x + y * y);
         }
 
         // Uses the second and third points to calculate the "height".
-        float height() const
+        double height() const
         {
-            float x = points[2].x - points[1].x;
-            float y = points[2].y - points[1].y;
+            double x = points[2].x - points[1].x;
+            double y = points[2].y - points[1].y;
             return sqrt(x * x + y * y);
         }
 
@@ -666,10 +666,10 @@ namespace bezier
         }
 
     public:
-        float valueAt(float t, size_t axis) const
+        double valueAt(double t, size_t axis) const
         {
             assert(axis < Vec2::size); // Currently only support 2D
-            float sum = 0;
+            double sum = 0;
             for (size_t n = 0; n < N+1; n++)
             {
                 sum += binomialCoefficients[n] * polynomialCoefficients[n].valueAt(t) * mControlPoints[n][axis];
@@ -677,17 +677,17 @@ namespace bezier
             return sum;
         }
 
-        Point valueAt(float t) const
+        Point valueAt(double t) const
         {
             Point p;
             for (size_t i = 0; i < Point::size; i++)
             {
-                p[i] = (float) valueAt(t, i);
+                p[i] = (double) valueAt(t, i);
             }
             return p;
         }
 
-        Tangent tangentAt(float t, bool normalize = true) const
+        Tangent tangentAt(double t, bool normalize = true) const
         {
             Point p;
             Bezier<N-1> derivative = this->derivative();
@@ -697,7 +697,7 @@ namespace bezier
             return p;
         }
 
-        Normal normalAt(float t, bool normalize = true) const
+        Normal normalAt(double t, bool normalize = true) const
         {
             Point tangent = tangentAt(t, normalize);
             return Normal(-tangent.y, tangent.x, normalize);
@@ -711,7 +711,7 @@ namespace bezier
             }
         }
 
-        void translate(float dx, float dy)
+        void translate(double dx, double dy)
         {
             for (size_t i = 0; i < N+1; i++)
             {
@@ -719,7 +719,7 @@ namespace bezier
             }
         }
 
-        void rotate(float angle, Vec2 pivot = Vec2(0, 0))
+        void rotate(double angle, Vec2 pivot = Vec2(0, 0))
         {
             for (size_t i = 0; i < N+1; i++)
             {
@@ -729,14 +729,14 @@ namespace bezier
 
         // Note: This is a brute force length calculation. If more precision is needed,
         // use something like https://pomax.github.io/bezierinfo/#arclength
-        float length(size_t intervals = 100) const
+        double length(size_t intervals = 100) const
         {
-            float length = 0.0f;
+            double length = 0.0;
 
             if (intervals > 0)
             {
-                float t = 0.0f;
-                const float dt = 1.0f / (float)intervals;
+                double t = 0.0;
+                const double dt = 1.0 / double(intervals);
 
                 Point p1 = valueAt(t);
                 Point p2;
@@ -744,8 +744,8 @@ namespace bezier
                 for (size_t i = 0; i < intervals; i++)
                 {
                     p2 = valueAt(t + dt);
-                    float x = p2.x - p1.x;
-                    float y = p2.y - p1.y;
+                    double x = p2.x - p1.x;
+                    double y = p2.y - p1.y;
                     length += sqrt(x * x + y * y);
                     p1.set(p2);
                     t += dt;
@@ -755,7 +755,7 @@ namespace bezier
             return length;
         }
 
-        Split<N> split(float t) const
+        Split<N> split(double t) const
         {
             Point l[N+1];
             Point r[N+1];
@@ -771,8 +771,8 @@ namespace bezier
             {
                 for (size_t i = 0; i < N - subs; i++)
                 {
-                    curr[i].x = (1.0f - t) * prev[i].x + t * prev[i + 1].x;
-                    curr[i].y = (1.0f - t) * prev[i].y + t * prev[i + 1].y;
+                    curr[i].x = (1.0 - t) * prev[i].x + t * prev[i + 1].x;
+                    curr[i].y = (1.0 - t) * prev[i].y + t * prev[i + 1].y;
                     if (i == 0)
                         l[subs+1].set(curr[i]);
                     if (i == (N - subs - 1))
@@ -790,25 +790,25 @@ namespace bezier
             return split(0.5f);
         }
 
-        float archMidPoint(const float epsilon = 0.001f, const size_t maxDepth = 100) const
+        double archMidPoint(const double epsilon = 0.001, const size_t maxDepth = 100) const
         {
-            float t = 0.5f;
-            float s = 0.5f; // Binary search split value
+            double t = 0.5;
+            double s = 0.5; // Binary search split value
 
             size_t iter = 0;
             while (iter < maxDepth)
             {
                 auto split = this->split(t);
-                float low  = split.left.length();
-                float high = split.right.length();
-                float diff = low - high;
+                double low  = split.left.length();
+                double high = split.right.length();
+                double diff = low - high;
 
                 if (std::abs(diff) <= epsilon)
                 {
                     break;
                 }
 
-                s *= 0.5f;
+                s *= 0.5;
                 t += (diff > 0 ? -1 : 1) * s;
                 iter++;
             }
@@ -817,7 +817,7 @@ namespace bezier
         }
 
         ExtremeValues derivativeZero(size_t intervals = internal::newtonRhapsonDefaultIntervalCount,
-                                     float epsilon = internal::fuzzyEpsilon,
+                                     double epsilon = internal::fuzzyEpsilon,
                                      size_t maxIterations = internal::newtonRhapsonDefaultMaxIterationCount) const
         {
             switch (N)
@@ -866,7 +866,7 @@ namespace bezier
             bezier.translate(translation);
 
             // Rotate bezier to align the first control point (lowest order) with the x-axis
-            float angle = -bezier[0].angle();
+            double angle = -bezier[0].angle();
             bezier.rotate(angle);
 
             return TightBoundingBox(bezier.extremePoints(), translation, angle);
@@ -912,30 +912,30 @@ namespace bezier
         }
 
         ExtremeValues newtonRhapson(size_t intervals = internal::newtonRhapsonDefaultIntervalCount,
-                                    float epsilon = internal::fuzzyEpsilon,
+                                    double epsilon = internal::fuzzyEpsilon,
                                     size_t maxIterations = internal::newtonRhapsonDefaultMaxIterationCount) const
         {
             assert(N >= 2);
             ExtremeValues xVals;
-            const float dt = 1.0f / (float) intervals;
-            const float absEpsilon = fabs(epsilon);
+            const double dt = 1.0 / double(intervals);
+            const double absEpsilon = std::abs(epsilon);
             const Bezier<N-1> db = derivative();
             const Bezier<N-2> ddb = db.derivative();
 
             for (size_t i = 0; i < Point::size; i++)
             {
-                float t = 0;
+                double t = 0;
 
                 while(t <= 1.0)
                 {
-                    float zeroVal = t;
+                    double zeroVal = t;
                     size_t current_iter = 0;
 
                     while (current_iter < maxIterations)
                     {
-                        float dbVal = db.valueAt(zeroVal, i);
-                        float ddbVal = ddb.valueAt(zeroVal, i);
-                        float nextZeroVal = zeroVal - (dbVal / ddbVal);
+                        double dbVal = db.valueAt(zeroVal, i);
+                        double ddbVal = ddb.valueAt(zeroVal, i);
+                        double nextZeroVal = zeroVal - (dbVal / ddbVal);
 
                         if (fabs(nextZeroVal - zeroVal) < absEpsilon)
                         {
