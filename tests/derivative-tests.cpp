@@ -177,13 +177,13 @@ TEST_CASE("Test tangents", "[curves][tangents]")
     tangent = bezier3.tangentAt(xVals[0].t);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.0, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(1.0, epsilon));
-    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(bezier::math::PI / 2.0, epsilon));
+    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(bezier::internal::pi / 2.0, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(90.0, epsilon));
 
     tangent = bezier3.tangentAt(xVals[1].t);
     CHECK_THAT(tangent.x, Catch::Matchers::WithinAbs(0.0, epsilon));
     CHECK_THAT(tangent.y, Catch::Matchers::WithinAbs(-1.0, epsilon));
-    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-bezier::math::PI / 2.0, epsilon));
+    CHECK_THAT(tangent.angle(), Catch::Matchers::WithinAbs(-bezier::internal::pi / 2.0, epsilon));
     CHECK_THAT(tangent.angleDeg(), Catch::Matchers::WithinAbs(-90.0, epsilon));
 
     tangent = bezier3.tangentAt(xVals[2].t);
@@ -241,7 +241,7 @@ TEST_CASE("Test normals", "[curves][normals]")
     normal = bezier3.normalAt(xVals[0].t);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(-1.0, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(0.0, epsilon));
-    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(-bezier::math::PI, epsilon));
+    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(-bezier::internal::pi, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(-180.0, epsilon));
 
     normal = bezier3.normalAt(xVals[1].t);
@@ -253,6 +253,6 @@ TEST_CASE("Test normals", "[curves][normals]")
     normal = bezier3.normalAt(xVals[2].t);
     CHECK_THAT(normal.x, Catch::Matchers::WithinAbs(0.0, epsilon));
     CHECK_THAT(normal.y, Catch::Matchers::WithinAbs(1.0, epsilon));
-    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(bezier::math::PI / 2.0, epsilon));
+    CHECK_THAT(normal.angle(), Catch::Matchers::WithinAbs(bezier::internal::pi / 2.0, epsilon));
     CHECK_THAT(normal.angleDeg(), Catch::Matchers::WithinAbs(90.0, epsilon));
 }
