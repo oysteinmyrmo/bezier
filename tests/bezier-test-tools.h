@@ -16,6 +16,6 @@ void checkPolynomialCoefficients(const size_t idx, const size_t one_minus_t, con
     CHECK(::bezier::Bezier<N>::polynomialCoefficients[idx].t == t);
 }
 
-void fuzzyCheckPoint(const ::bezier::Point p, const double x, const double y, const double epsilon = 1.0e-4);
+void fuzzyCheckPoint(const ::bezier::Point p, const double x, const double y, const double epsilon = 1.0e-6);
 } // namespace test
 } // namespace bezier
