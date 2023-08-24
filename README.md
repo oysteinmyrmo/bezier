@@ -41,7 +41,7 @@ p = cubicBezier.valueAt(0);   // (120, 160)
 p = cubicBezier.valueAt(0.5); // (138.125, 197.5)
 
 // Get coordinate values for a single axis. Currently only supports 2D.
-float value;
+double value;
 value = cubicBezier.valueAt(1, 0);    // 220 (x-coordinate at t = 1)
 value = cubicBezier.valueAt(0.75, 1); // 157.1875 (y-coordinate at t = 0.75)
 value = cubicBezier.length();         // 272.85 (Arc length of the bezier curve)
@@ -54,8 +54,8 @@ copy.rotate(3.14, {-5, 20}); // Rotate 3.14 radians around (-5, 20)
 
 // Get normals along the bezier curve.
 bezier::Normal normal = cubicBezier.normalAt(0.75); // Get normalized normal at t = 0.75. Add false as second argument to disable normalization.
-float angle = normal.angle();       // Angle in radians
-float angleDeg = normal.angleDeg(); // Angle in degrees
+double angle = normal.angle();       // Angle in radians
+double angleDeg = normal.angleDeg(); // Angle in degrees
 
 // Get tangents along the bezier curve.
 bezier::Tangent tangent = cubicBezier.tangentAt(0.25); // Get normalized tangent at t = 0.25. Add false as second argument to disable normalization.
@@ -79,12 +79,11 @@ bezier::TightBoundingBox tbb = cubicBezier.tbb();  // Tight bounding box
 
 // Split the bezier curve at desired points. The left and right parts are new bezier curves
 // of the same order as the original curve.
-auto split = cubicBezier.split(0.5f);
-auto left  = split.left;  // Left part of the split
-auto right = split.right; // Right part of the split
+auto split = cubicBezier.split(0.5);
+auto &left  = split.left;  // Left part of the split
+auto &right = split.right; // Right part of the split
 
 // Find the mid point on the curve by arch length.
-float tAtMidPoint = cubicBezier.archMidPoint();            // 0.70718
-bezier::Point midPoint = cubicBezier.valueAt(tAtMidPoint); // (183.8, 168.8)
+double tAtMidPoint = cubicBezier.archMidPoint();           // 0.70718
+bezier::Point midPoint = cubicBezier.valueAt(tAtMidPoint); // (183.837, 168.768)
 ```
-
