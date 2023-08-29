@@ -305,9 +305,9 @@ namespace bezier
         static constexpr size_t size = 2;
     };
 
-    typedef Vec2 Point;
-    typedef Vec2 Normal;
-    typedef Vec2 Tangent;
+    using Point = Vec2;
+    using Normal = Vec2;
+    using Tangent = Vec2;
 
     struct ExtremeValue
     {
@@ -499,7 +499,7 @@ namespace bezier
         Point points[4]; // Starting in lower left corner, going clock-wise.
     };
 
-    typedef AxisAlignedBoundingBox AABB;
+    using AABB = AxisAlignedBoundingBox;
 
     class TightBoundingBox
     {
@@ -602,7 +602,7 @@ namespace bezier
         Point points[4]; // The points are ordered in a clockwise manner.
     };
 
-    typedef TightBoundingBox TBB;
+    using TBB = TightBoundingBox;
 
     template <size_t N>
     class Bezier
