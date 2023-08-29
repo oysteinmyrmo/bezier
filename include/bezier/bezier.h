@@ -824,9 +824,6 @@ namespace bezier
                     return derivativeZero1();
                 case 2:
                     return derivativeZero2();
-                case 3:
-//                    return derivativeZero3();
-                    return newtonRhapson(intervals, epsilon, maxIterations);
                 default:
                     return newtonRhapson(intervals, epsilon, maxIterations);
             }
@@ -899,13 +896,6 @@ namespace bezier
             if (internal::isWithinZeroAndOne(roots[1]))
                 xVals.add(roots[1], 1);
             return xVals;
-        }
-
-        ExtremeValues derivativeZero3() const
-        {
-            // Note: NOT IMPLMENTED YET
-            assert(N == 3);
-            return ExtremeValues();
         }
 
         ExtremeValues newtonRhapson(size_t intervals = internal::newtonRhapsonDefaultIntervalCount,
