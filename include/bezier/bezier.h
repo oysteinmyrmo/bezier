@@ -620,7 +620,6 @@ namespace bezier
             Bezier<M> right;
         };
 
-    public:
         Bezier()
         {
             for (size_t i = 0; i < N+1; i++)
@@ -665,7 +664,6 @@ namespace bezier
             return Bezier<N-1>(derivativeWeights);
         }
 
-    public:
         double valueAt(double t, size_t axis) const
         {
             assert(axis < Vec2::size); // Currently only support 2D
@@ -872,7 +870,6 @@ namespace bezier
             return TightBoundingBox(bezier.extremePoints(), translation, angle);
         }
 
-    public:
         Point& operator [](size_t idx)
         {
             assert(idx < size());
