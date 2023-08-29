@@ -88,7 +88,7 @@ namespace bezier
         }
 
     private:
-        size_t mCoefficients[size()]{0};
+        std::array<size_t, size()> mCoefficients{0};
     };
 
     struct PolynomialPair
@@ -134,7 +134,7 @@ namespace bezier
         }
 
     private:
-        PolynomialPair mPolynomialPairs[size()];
+        std::array<PolynomialPair, size()> mPolynomialPairs;
     };
 
     class Vec2
@@ -415,7 +415,7 @@ namespace bezier
     {
     public:
         AxisAlignedBoundingBox(const Point& p0, const Point& p1, const Point& p2, const Point& p3)
-            : points{{p0}, {p1}, {p2}, {p3}}
+            : points{p0, p1, p2, p3}
         {}
 
         explicit AxisAlignedBoundingBox(const ExtremePoints& xPoints)
@@ -496,7 +496,7 @@ namespace bezier
         }
 
     private:
-        Point points[4]; // Starting in lower left corner, going clock-wise.
+        std::array<Point, 4> points; // Starting in lower left corner, going clock-wise.
     };
 
     using AABB = AxisAlignedBoundingBox;
