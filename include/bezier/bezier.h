@@ -418,7 +418,7 @@ namespace bezier
             : points{{p0}, {p1}, {p2}, {p3}}
         {}
 
-        AxisAlignedBoundingBox(const ExtremePoints& xPoints)
+        explicit AxisAlignedBoundingBox(const ExtremePoints& xPoints)
         {
             double minX = std::numeric_limits<double>::max();
             double maxX = -std::numeric_limits<double>::max();
@@ -627,7 +627,7 @@ namespace bezier
                 mControlPoints[i].set(0, 0);
         }
 
-        Bezier(const std::vector<Point>& controlPoints)
+        explicit Bezier(const std::vector<Point>& controlPoints)
         {
             assert(controlPoints.size() == size()); // The bezier curve must be initialized with the expected number of points
             for (size_t i = 0; i < controlPoints.size(); i++)
