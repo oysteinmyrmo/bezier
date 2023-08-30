@@ -533,10 +533,10 @@ namespace bezier
             if (xPoints.empty())
                 return;
 
-            for (size_t i = 0; i < 4; i++)
+            for (auto &p : points)
             {
-                points[i].rotate(-rotation);
-                points[i].translate(-translation);
+                p.rotate(-rotation);
+                p.translate(-translation);
             }
         }
 
