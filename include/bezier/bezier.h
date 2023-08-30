@@ -25,6 +25,7 @@
 #include <limits>
 #include <algorithm>
 #include <array>
+#include <utility>
 
 namespace bezier
 {
@@ -599,7 +600,7 @@ namespace bezier
         }
 
     private:
-        Point points[4]; // The points are ordered in a clockwise manner.
+        std::array<Point, 4> points; // The points are ordered in a clockwise manner.
     };
 
     using TBB = TightBoundingBox;
@@ -611,9 +612,9 @@ namespace bezier
         template <size_t M>
         struct Split
         {
-            Split(const Point *l, const Point *r)
-                : left(l, M+1)
-                , right(r, M+1)
+            Split(std::array<Point, M+1> &&l, std::array<Point, M+1> &&r)
+                : left(std::move(l))
+                , right(std::move(r))
             {}
 
             Bezier<M> left;
@@ -633,11 +634,10 @@ namespace bezier
                 mControlPoints[i] = Point(controlPoints[i]);
         }
 
-        Bezier(const Point *points, size_t size)
+        template<size_t M>
+        Bezier(std::array<Point, M> &&points)
         {
-            assert(size == N+1);
-            for (size_t i = 0; i < size; i++)
-                mControlPoints[i] = points[i];
+            mControlPoints = std::move(points);
         }
 
         // The order of the bezier curve.
@@ -755,8 +755,8 @@ namespace bezier
 
         Split<N> split(double t) const
         {
-            Point l[N+1];
-            Point r[N+1];
+            std::array<Point, N+1> l;
+            std::array<Point, N+1> r;
             l[0] = mControlPoints[0];
             r[0] = mControlPoints[N];
 
@@ -780,7 +780,7 @@ namespace bezier
                 subs++;
             }
 
-            return Split<N>(l, r);
+            return Split<N>(std::move(l), std::move(r));
         }
 
         Split<N> split() const
