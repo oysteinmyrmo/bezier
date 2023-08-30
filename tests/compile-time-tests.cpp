@@ -25,14 +25,15 @@
 
 TEST_CASE("Test compile time binomial coefficients", "[binomial_coefficients][compile_time]")
 {
-    static_assert(bezier::Bezier<0>::binomialCoefficients.size() == 1, "");
-    static_assert(bezier::Bezier<1>::binomialCoefficients.size() == 2, "");
-    static_assert(bezier::Bezier<2>::binomialCoefficients.size() == 3, "");
-    static_assert(bezier::Bezier<3>::binomialCoefficients.size() == 4, "");
-    static_assert(bezier::Bezier<4>::binomialCoefficients.size() == 5, "");
-    static_assert(bezier::Bezier<5>::binomialCoefficients.size() == 6, "");
-    static_assert(bezier::Bezier<10>::binomialCoefficients.size() == 11, "");
-    static_assert(bezier::Bezier<15>::binomialCoefficients.size() == 16, "");
-    static_assert(bezier::Bezier<20>::binomialCoefficients.size() == 21, "");
-    static_assert(bezier::Bezier<50>::binomialCoefficients.size() == 51, "");
+    static_assert(bezier::BinomialCoefficients<0>::size() == 1, "");
+    static_assert(bezier::BinomialCoefficients<0>::size() == 1, "");
+    static_assert(bezier::BinomialCoefficients<1>::size() == 2, "");
+    static_assert(bezier::BinomialCoefficients<2>::size() == 3, "");
+    static_assert(bezier::BinomialCoefficients<3>::size() == 4, "");
+    static_assert(bezier::BinomialCoefficients<4>::size() == 5, "");
+    static_assert(bezier::BinomialCoefficients<5>::size() == 6, "");
+    static_assert(bezier::BinomialCoefficients<10>::size() == 11, "");
+    static_assert(bezier::BinomialCoefficients<15>::size() == 16, "");
+    static_assert(bezier::BinomialCoefficients<20>::size() == 21, "");
+    static_assert(bezier::BinomialCoefficients<50>::size() == 51, "");
 }
