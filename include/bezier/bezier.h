@@ -319,7 +319,7 @@ namespace bezier
 
         bool fuzzyEquals(const ExtremeValue& other) const
         {
-            return axis == other.axis && fabs(t - other.t) < internal::fuzzyEpsilon;
+            return axis == other.axis && std::abs(t - other.t) < internal::fuzzyEpsilon;
         }
 
         const double t;
@@ -924,7 +924,7 @@ namespace bezier
                         double ddbVal = ddb.valueAt(zeroVal, i);
                         double nextZeroVal = zeroVal - (dbVal / ddbVal);
 
-                        if (fabs(nextZeroVal - zeroVal) < absEpsilon)
+                        if (std::abs(nextZeroVal - zeroVal) < absEpsilon)
                         {
                             if (internal::isWithinZeroAndOne(nextZeroVal))
                             {
