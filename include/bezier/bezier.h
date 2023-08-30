@@ -785,7 +785,7 @@ namespace bezier
 
         Split<N> split() const
         {
-            return split(0.5f);
+            return split(0.5);
         }
 
         double archMidPoint(const double epsilon = 0.001, const size_t maxDepth = 100) const
