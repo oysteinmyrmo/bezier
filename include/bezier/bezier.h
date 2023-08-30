@@ -19,13 +19,13 @@
  * SOFTWARE.
  */
 #pragma once
-#include <cassert>
-#include <cmath>
-#include <vector>
-#include <limits>
 #include <algorithm>
 #include <array>
+#include <cassert>
+#include <cmath>
+#include <limits>
 #include <utility>
+#include <vector>
 
 namespace bezier
 {
