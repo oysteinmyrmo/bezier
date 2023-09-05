@@ -635,10 +635,8 @@ namespace bezier
         }
 
         template<size_t M>
-        explicit Bezier(std::array<Point, M> &&points)
-        {
-            mControlPoints = std::move(points);
-        }
+        explicit Bezier(std::array<Point, M> &&points) : mControlPoints{std::move(points)}
+        {}
 
         // The order of the bezier curve.
         size_t order() const
