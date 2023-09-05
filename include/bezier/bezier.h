@@ -922,13 +922,10 @@ namespace bezier
                         double ddbVal = ddb.valueAt(zeroVal, i);
                         double nextZeroVal = zeroVal - (dbVal / ddbVal);
 
-                        if (std::abs(nextZeroVal - zeroVal) < absEpsilon)
+                        if (std::abs(nextZeroVal - zeroVal) < absEpsilon && internal::isWithinZeroAndOne(nextZeroVal))
                         {
-                            if (internal::isWithinZeroAndOne(nextZeroVal))
-                            {
-                                xVals.add(nextZeroVal, i);
-                                break;
-                            }
+                            xVals.add(nextZeroVal, i);
+                            break;
                         }
 
                         zeroVal = nextZeroVal;
