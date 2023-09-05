@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare(
     bezier
     GIT_REPOSITORY https://github.com/oysteinmyrmo/bezier.git
-    GIT_TAG        v0.2.0
+    GIT_TAG        v0.2.1
 )
 
 set(BEZIER_TESTS OFF) # Default ON
