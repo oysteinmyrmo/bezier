@@ -635,7 +635,7 @@ namespace bezier
         }
 
         template<size_t M>
-        Bezier(std::array<Point, M> &&points)
+        explicit Bezier(std::array<Point, M> &&points)
         {
             mControlPoints = std::move(points);
         }
